@@ -55,7 +55,8 @@ class _License extends \IPS\core\AdminNotification
 	 */
 	public static function permissionCheck( \IPS\Member $member )
 	{
-		return $member->hasAcpRestriction( 'core', 'settings', 'licensekey_manage' );
+		/* Frozen/self-maintained install: suppress license-key ACP nags */
+		return FALSE;
 	}
 	
 	/**

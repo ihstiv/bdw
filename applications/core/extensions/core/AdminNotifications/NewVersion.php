@@ -60,12 +60,8 @@ class _NewVersion extends \IPS\core\AdminNotification
 	 */
 	public static function permissionCheck( \IPS\Member $member )
 	{
-		if ( \IPS\CIC AND \IPS\IPS::isManaged() )
-		{
-			return FALSE;
-		}
-		
-		return $member->hasAcpRestriction( 'core', 'overview', 'upgrade_manage' );
+		/* Frozen/self-maintained install: suppress new-version upgrade nag */
+		return FALSE;
 	}
 	
 	/**

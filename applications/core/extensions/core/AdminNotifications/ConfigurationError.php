@@ -114,22 +114,11 @@ class _ConfigurationError extends \IPS\core\AdminNotification
 			}
 		}
 		
-		/* Any tasks which were supposed to have run more than 36 hours ago */
+		/* Frozen/self-maintained install: never nag that the task runner is behind
+		   (prod cron is monitored separately; this warning is just noise here) */
 		if ( !\IPS\CIC )
 		{
-			$taskWasSupposedToRun = \IPS\Db::i()->select( 'next_run', 'core_tasks', array( 'core_tasks.enabled=1 AND (core_plugins.plugin_enabled=1 OR core_applications.app_enabled=1)' ), 'next_run ASC' )
-				->join( 'core_applications', array( 'core_applications.app_directory=core_tasks.app' ) )
-				->join( 'core_plugins', array( 'core_plugins.plugin_id=core_tasks.plugin' ) )
-				->first();
-			
-			if ( ( time() - $taskWasSupposedToRun ) > ( \IPS\TASK_OVERDUE_HOURS * 3600 ) )
-			{
-				\IPS\core\AdminNotification::send( 'core', 'ConfigurationError', 'tasksNotRunning', FALSE );
-			}
-			else
-			{
-				\IPS\core\AdminNotification::remove( 'core', 'ConfigurationError', 'tasksNotRunning' );
-			}
+			\IPS\core\AdminNotification::remove( 'core', 'ConfigurationError', 'tasksNotRunning' );
 		}
 		
 		/* Data storage not working */
