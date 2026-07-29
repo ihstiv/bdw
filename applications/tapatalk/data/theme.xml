@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<theme name="Default" author_name="Invision Power Services, Inc" author_url="http://www.invisionpower.com">
- <template template_group="tapatalk" template_name="tapatalk_smartbanner" template_data="" template_location="front" template_app="tapatalk"><![CDATA[{{include(\IPS\ROOT_PATH . "/applications/tapatalk/interface/smartbanner.php");}}
-{{return isset($app_head_include) ? $app_head_include : '';}}
-]]></template>
-</theme>
