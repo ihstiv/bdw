@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<build>
+ <module key="admin/reviews"><![CDATA[{"default_controller":"products","protected":0}]]></module>
+ <module key="front/reviews"><![CDATA[{"default_controller":"index","protected":0}]]></module>
+ <widget key="ReviewFeed"><![CDATA[{"class":"\\IPS\\Widget\\PermissionCache","restrict":["sidebar","cms"],"default_area":"","allow_reuse":true,"menu_style":"menu","embeddable":true}]]></widget>
+ <hook key="ReviewsSearchIndex"><![CDATA[{"type":"C","class":"\\IPS\\Content\\Search\\Mysql\\Index"}]]></hook>
+ <hook key="ReviewsSearch"><![CDATA[{"type":"C","class":"\\IPS\\core\\modules\\front\\search\\search"}]]></hook>
+ <hook key="ReviewsStreamController"><![CDATA[{"type":"C","class":"\\IPS\\core\\modules\\front\\discover\\streams"}]]></hook>
+ <hook key="ReviewsOutput"><![CDATA[{"type":"C","class":"\\IPS\\Output"}]]></hook>
+ <hook key="ReviewsProfile"><![CDATA[{"type":"C","class":"\\IPS\\core\\modules\\front\\members\\profile"}]]></hook>
+ <hook key="ReviewsGallerySettings"><![CDATA[{"type":"C","class":"\\IPS\\gallery\\modules\\admin\\gallery\\settings"}]]></hook>
+</build>

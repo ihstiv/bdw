@@ -1,0 +1,18 @@
+[
+    {
+        "key": "fcontent_ignoreurls",
+        "default": ""
+    },
+    {
+        "key": "fcontent_imageOnTheFly",
+        "default": ""
+    },
+    {
+        "key": "fcontent_noimg",
+        "default": ""
+    },
+    {
+        "key": "fcontent_resizerMode",
+        "default": "none"
+    }
+]

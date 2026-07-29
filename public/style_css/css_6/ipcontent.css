@@ -1,0 +1,52 @@
+.ipsLayout_content
+.subcat{margin-bottom:10px;padding:15px
+0 10px;border-top:1px solid #d8d8d8;overflow:hidden}.ipsLayout_content .subcat
+h2{float:left;width:180px;font-weight:normal}.ipsLayout_content .subcat h2
+.desc{display:block;margin-top:10px}.ipsLayout_content .subcat h2
+img{vertical-align:middle;margin-right:5px}.ipsLayout_content .subcat h2
+a{text-decoration:none}.ipsLayout_content .subcat
+em.moderated{padding:5px;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px}.ipsLayout_content
+.children{overflow:hidden;font-size:11px;margin-top:8px;float:left;clear:left;max-width:180px;margin-left:20px;line-height:130%}.ipsLayout_content .pagelinks
+a{display:inline-block;text-decoration:none;margin-left:5px;padding:4px
+7px 4px;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;font-size:14px;font-weight:bold}.ipsLayout_content .pagelinks a:hover{text-decoration:none !important}.ipsLayout_content
+.links{display:inline-block}.article-pages{overflow:hidden}span.pagination.no_pages{display:none;height:0px}#recent_articles,#recent_comments{padding:0px;overflow:hidden}#recent_articles h3, #recent_comments
+h3{margin:0px
+0px 3px 0px}#article_sidebar
+.block_list{padding-top:0px}#recent_articles .block_list
+li{padding-right:10px}#recent_comments
+.photo{float:left;margin-right:8px}#recent_comments
+.desc{font-size:0.9em}#category_list
+.nav{padding:0px;background:#f6f4f4;border-bottom:1px solid #dadada;margin-bottom:15px}#category_list .nav ul
+a{text-decoration:none;display:block;padding:8px
+12px}#category_list .nav ul a:hover{background:#d5dde5}#category_list .nav
+li{font-size:12px;float:left}#category_list .nav
+li.active{background:#fff;border:solid #dadada;border-width:1px 1px 0 1px}#category_list>ul{margin-bottom:20px}#category_list > ul
+li{float:left;margin:0
+7px}#category_list > ul li
+.title{display:block}#category_list > ul
+li.first{margin-left:11px}#category_list > ul
+li.last{margin-right:11px}.section_title, .post_form
+h2{font-size:22px !important;font-weight:bold;border-bottom:2px solid #cbcbcb;padding-bottom:3px;margin-bottom:5px}.add_link, .post_block .share_links
+a{display:inline-block;text-decoration:none;margin-left:5px;padding:4px
+7px 4px;color:#fff;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;font-size:11px;cursor:pointer}.add_link:hover, .post_block .share_links a:hover{text-decoration:none !important;color:#fff}.add_link{position:relative;top:-4px}.desc{font-size:11px;color:#858585}.videos{width:78%}#videos_latest{text-align:center}#videos_latest h2, #videos_recent
+h2{text-align:left;font-size:22px !important;font-weight:bold;border-bottom:2px solid #cbcbcb;padding-bottom:3px;margin-bottom:5px}#videos_recent{clear:both;width:100%;margin-top:20px}.video_thumb{padding:10px;width:140px;height:140px;overflow:hidden;margin:10px
+3px 3px 3px;float:left}.video_thumb
+img{margin-bottom:5px}.video_thumb
+a{color:#30587f;font-size:11px;font-weight:bold;text-decoration:none}.video_thumb
+.time{color:#979797;font-size:11px}.video_thumb
+.rating{margin-top:8px;display:inline-block}.mini_cal td, .mini_cal
+th{text-align:center;padding:4px}.mini_cal
+th{font-weight:bold}.unpublished, body .unpublished td,
+.unpublished td.altrow, .post_block.unpublished,
+body
+td.unpublished{background-color:#d5eaff}.unpublished, .unpublished
+a{color:#0056ff}.teaser{margin-bottom:30px}.ccsBase{background:#fcfcfc}.ccsBase
+.ccsBlockTitle{background:#DBE2EC;font:normal 14px helvetica, arial, sans-serif;color:#204066;padding:8px
+10px}.ccsRow_1{background:#fff !important}.ccsRow_2{background:#f1f6f9 !important}.ccsRow_3{background:#f7fbfc !important}.ccsRow_4{}.ccsText_light{color:#777 !important}.ccsUserPhoto{border:1px
+solid #d5d5d5 !important;-webkit-box-shadow:0px 2px 2px rgba(0,0,0,0.1) !important;-moz-box-shadow:0px 2px 2px rgba(0,0,0,0.1) !important;box-shadow:0px 2px 2px rgba(0,0,0,0.1) !important}.ipsForm .ipsField.ipsField_checkbox
+p.ipsField_content{margin-top:3px}#article_list
+div.ipsBox{background:none;border-bottom:solid 1px #dedcd7;padding-bottom:10px;margin-bottom:10px}#article_tags, #article_tags
+a{font:normal 13px arial!important}#article_tags a:hover{color:#85b685}div#article_tags ul
+li.ipsPad_half.ipsType_smaller{padding:0!important}div#category_info.message.unspecific.clearfix{margin:0
+0 5px 0}#category_info
+.pagination{padding:inherit !important;line-height:normal !important}

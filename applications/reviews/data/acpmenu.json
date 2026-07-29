@@ -1,0 +1,16 @@
+{
+    "reviews": {
+        "categories": {
+            "tab": "community",
+            "controller": "categories",
+            "do": "",
+            "restriction": null
+        },
+        "products": {
+            "tab": "community",
+            "controller": "products",
+            "do": "",
+            "restriction": null
+        }
+    }
+}

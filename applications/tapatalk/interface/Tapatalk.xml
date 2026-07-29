@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin name="Tapatalk" version_long="16600" version_human="1.6.6" author="Tapatalk Inc." website="http://www.tapatalk.com" update_check=""><hooks><hook type="S" class="\IPS\Theme\class_core_front_global"><![CDATA[//<?php
+
+class hook124 extends _HOOK_CLASS_
+{
+
+/* !Hook Data - DO NOT REMOVE */
+public static function hookData() {
+    
+    
+ return array_merge_recursive( array (
+  'globalTemplate' => 
+  array (
+    0 => 
+    array (
+      'selector' => 'html > head',
+      'type' => 'add_inside_end',
+      'content' => '{template="tapatalk_smartbanner" group="plugins" location="global" app="core"}',
+    ),
+  ),
+), parent::hookData() );
+}
+/* End Hook Data */
+
+
+
+
+}]]></hook><hook type="C" class="\IPS\core\Messenger\Conversation"><![CDATA[//<?php
+
+abstract class hook125 extends _HOOK_CLASS_
+{
+
+
+      /**
+       * Process created object AFTER the object has been created
+       *
+       * @param	\IPS\Content\Comment|NULL	$comment	The first comment
+       * @param	array						$values		Values from form
+       * @return	void
+       */
+	protected function processAfterCreate($comment, $values )
+	{
+		  try
+		  {
+				    if(!class_exists('TapatalkPush'))
+				    {
+				        $tapatalk_dir = 'applications/tapatalk/interface';
+				        $tapatalk_dir_url = dirname(__FILE__) . '/' .  $tapatalk_dir;
+				        include_once($tapatalk_dir_url . '/push/TapatalkPush.php');
+				    }
+				    $TapatalkPush = new \TapatalkPush();
+				    $TapatalkPush->proccessPush($comment, $values);
+				    return call_user_func_array( 'parent::processAfterCreate', func_get_args() );
+		  }
+		  catch ( \RuntimeException $e )
+		  {
+			  if ( method_exists( get_parent_class(), __FUNCTION__ ) )
+			  {
+				  return call_user_func_array( 'parent::' . __FUNCTION__, func_get_args() );
+			  }
+			  else
+			  {
+				  throw $e;
+			  }
+		  }
+	}
+	
+	public function authorize( $members )
+	{
+		try
+		{
+			if(!class_exists('TapatalkPush'))
+			{
+				$tapatalk_dir = 'applications/tapatalk/interface';
+				$tapatalk_dir_url = dirname(__FILE__) . '/' .  $tapatalk_dir;
+				include_once($tapatalk_dir_url . '/push/TapatalkPush.php');
+			}
+			$TapatalkPush = new \TapatalkPush();
+			$TapatalkPush->proccessPush($this, array('action'=>'invite', 'members'=>$members));
+			return call_user_func_array( 'parent::' . __FUNCTION__, func_get_args() );
+		}
+		catch ( \RuntimeException $e )
+		{
+			if ( method_exists( get_parent_class(), __FUNCTION__ ) )
+			{
+				return call_user_func_array( 'parent::' . __FUNCTION__, func_get_args() );
+			}
+			else
+			{
+				throw $e;
+			}
+		}
+	}
+}]]></hook><hook type="C" class="\IPS\core\modules\front\system\notifications"><![CDATA[//<?php
+
+abstract class hook127 extends _HOOK_CLASS_
+{
+
+
+   /**
+	 * Follow Something
+	 *
+	 * @return	void
+	 */
+	protected function follow()
+	{
+		  try
+		  {
+				    if(!class_exists('TapatalkPush'))
+				    {
+				        $tapatalk_dir = 'applications/tapatalk/interface';
+				        $tapatalk_dir_url = dirname(__FILE__) . '/' .  $tapatalk_dir;
+				        include_once($tapatalk_dir_url . '/push/TapatalkPush.php');
+				    }
+				    $TapatalkPush = new \TapatalkPush();
+				    $TapatalkPush->proccessPush($this);
+				    return call_user_func_array( 'parent::' . __FUNCTION__, func_get_args() );
+		  }
+		  catch ( \RuntimeException $e )
+		  {
+			  if ( method_exists( get_parent_class(), __FUNCTION__ ) )
+			  {
+				  return call_user_func_array( 'parent::' . __FUNCTION__, func_get_args() );
+			  }
+			  else
+			  {
+				  throw $e;
+			  }
+		  }
+	}
+}]]></hook><hook type="C" class="\IPS\Content\Comment"><![CDATA[//<?php
+
+abstract class hook126 extends _HOOK_CLASS_
+{
+	/**
+	 * Do stuff after creating (abstracted as comments and reviews need to do different things)
+	 *
+	 * @return	void
+	 */
+	public function postCreate()
+	{
+			try
+			{
+			      if(!class_exists('TapatalkPush'))
+			      {
+			          $tapatalk_dir = 'applications/tapatalk/interface';
+			          $tapatalk_dir_url = dirname(__FILE__) . '/' .  $tapatalk_dir;
+			          include_once($tapatalk_dir_url . '/push/TapatalkPush.php');
+			      }
+			      $TapatalkPush = new \TapatalkPush();
+			      $TapatalkPush->proccessPush($this);
+			      return call_user_func_array( 'parent::postCreate', func_get_args() );
+			}
+			catch ( \RuntimeException $e )
+			{
+				if ( method_exists( get_parent_class(), __FUNCTION__ ) )
+				{
+					return call_user_func_array( 'parent::' . __FUNCTION__, func_get_args() );
+				}
+				else
+				{
+					throw $e;
+				}
+			}
+	}
+    
+    /**
+     * Give reputation
+     *
+     * @param	int					$type	1 for positive, -1 for negative
+     * @param	\IPS\Member|NULL	$member	The member to check for (NULL for currently logged in member)
+     * @return	void
+     * @throws	\DomainException|\BadMethodCallException
+     */
+	public function giveReputation( $type, \IPS\Member $member=NULL )
+	{
+	
+			try
+			{
+			      if($type == 1)
+			      {
+			          if(!class_exists('TapatalkPush'))
+			          {
+			              $tapatalk_dir = 'applications/tapatalk/interface';
+			              $tapatalk_dir_url = dirname(__FILE__) . '/' .  $tapatalk_dir;
+			              include_once($tapatalk_dir_url . '/push/TapatalkPush.php');
+			          }
+			          $TapatalkPush = new \TapatalkPush();
+			          $TapatalkPush->proccessPush($this, array('action'=>'like'));
+			      }
+				return call_user_func_array( 'parent::giveReputation', func_get_args() );
+			}
+			catch ( \RuntimeException $e )
+			{
+				if ( method_exists( get_parent_class(), __FUNCTION__ ) )
+				{
+					return call_user_func_array( 'parent::' . __FUNCTION__, func_get_args() );
+				}
+				else
+				{
+					throw $e;
+				}
+			}
+		
+	}
+/**
+	 * Returns the content
+	 *
+	 * @return	string
+	 */
+	public function content()
+	{
+		
+			try
+			{
+		      	$content = call_user_func_array( 'parent::content', func_get_args() );
+		      	try
+				{
+		          	if(!defined('IN_MOBIQUO'))
+		            {
+		    			$protocol = 'http';
+	               		if(\IPS\Request::i()->isSecure()){$protocol = 'https';}
+						$originalcontent = $content;
+						$content = preg_replace('/\[emoji(\d+)\]/i', '<img src="'.$protocol.'://emoji.tapatalk-cdn.com/emoji\1.png" />', $content);
+						if(!\IPS\Settings::i()->remote_image_proxy)
+						{
+		     			    $content = preg_replace('/(?!imageproxy\.php\?img=)https?:\/\/cloud\.tapatalk\.com/i',  $protocol . '://cloud.tapatalk.com', $content);
+		     			    $content = preg_replace('/(?!imageproxy\.php\?img=)https?:\/\/uploads\.tapatalk-cdn\.com/i',  $protocol . '://uploads.tapatalk-cdn.com', $content);
+							$content = preg_replace('/(?!imageproxy\.php\?img=)https?:\/\/images\.tapatalk-cdn\.com/i',  $protocol . '://images.tapatalk-cdn.com', $content);
+						}
+                  if(empty($content))
+                  {
+                    return $originalcontent;
+                  }
+		            }
+		      	}
+		        catch ( \RuntimeException $e )
+				{
+		          
+		        }
+		      	return $content;
+			}
+			catch ( \RuntimeException $e )
+			{
+				if ( method_exists( get_parent_class(), __FUNCTION__ ) )
+				{
+					return call_user_func_array( 'parent::' . __FUNCTION__, func_get_args() );
+				}
+				else
+				{
+					throw $e;
+				}
+			}
+		}
+}]]></hook><hook type="C" class="\IPS\Content"><![CDATA[//<?php
+
+abstract class hook7 extends _HOOK_CLASS_
+{
+   	public function delete()
+	{
+		try
+		{
+			try
+	        {
+	        	if( $this instanceof \IPS\forums\Topic || $this instanceof \IPS\forums\Topic\Post )
+	        	{
+		        	if(!class_exists('TapatalkPush'))
+		            {
+		                $tapatalk_dir = 'applications/tapatalk/interface';
+		                $tapatalk_dir_url = dirname(__FILE__) . '/' .  $tapatalk_dir;
+		                include_once($tapatalk_dir_url . '/push/TapatalkPush.php');
+		            }
+		            $TapatalkPush = new \TapatalkPush();
+		            $TapatalkPush->proccessPush($this->_data, array('action'=>'delete'));
+		        }
+	            return call_user_func_array( 'parent::delete', func_get_args() );
+	        }
+	        catch ( \RuntimeException $e )
+	        {
+	            if ( method_exists( get_parent_class(), __FUNCTION__ ) )
+	            {
+	                return call_user_func_array( 'parent::' . __FUNCTION__, func_get_args() );
+	            }
+	            else
+	            {
+	                throw $e;
+	            }
+	        }
+		}
+		catch ( \RuntimeException $e )
+		{
+			if ( method_exists( get_parent_class(), __FUNCTION__ ) )
+			{
+				return call_user_func_array( 'parent::' . __FUNCTION__, func_get_args() );
+			}
+			else
+			{
+				throw $e;
+			}
+		}
+	}
+
+}]]></hook></hooks><settings><setting><key>tapatalk_apikey</key><default/></setting><setting><key>tapatalk_inappreg</key><default>1</default></setting><setting><key>tapatalk_inappregapprove</key><default>1</default></setting><setting><key>tapatalk_push_slug</key><default>0</default></setting><setting><key>tapatalk_banner_data</key><default></default></setting><setting><key>tapatalk_banner_expire</key><default>0</default></setting><setting><key>tapatalk_usergroup</key><default/></setting><setting><key>tapatalk_disableadsforgroup</key><default/></setting><setting><key>tapatalk_plugindir</key><default>applications/tapatalk/interface</default></setting><setting><key>tapatalk_hideforums</key><default/></setting><setting><key>tapatalk_disablenewtopic</key><default/></setting><setting><key>tapatalk_threadcontentreplacement</key><default/></setting><setting><key>tapatalk_mobilesmartbanner</key><default>1</default></setting><setting><key>tapatalk_mobilegoogle</key><default>1</default></setting><setting><key>tapatalk_mobilefacebook</key><default>1</default></setting><setting><key>tapatalk_mobiletwitter</key><default>1</default></setting></settings><settingsCode><![CDATA[//<?php
+
+function TTSettingsGetForumsArray($forums = array(), $parentForum = null, $level=0)
+{
+    if($parentForum != null)
+    {
+        if($parentForum->hasChildren())
+        {
+            $level++;
+            foreach($parentForum->children() as $forum)
+            {
+                $levelstr = '';
+                for($ix=0;$ix<$level;$ix++)
+                {
+                    $levelstr .= '-';
+                }
+                $forumTitle = '';
+                try
+                {
+                  $forumTitle = \IPS\Member::loggedIn()->language()->get(\IPS\forums\forum::$titleLangPrefix .  $forum->_id);
+                }
+                catch(Exception $ex)
+                {
+                  $forumTitle = $forum->_id;
+                }
+                $forums[$forum->_id] = $levelstr . $forumTitle;
+                $forums = TTSettingsGetForumsArray($forums, $forum, $level);
+            }
+        }
+    }
+    else
+    {
+        foreach(\IPS\forums\Forum::roots() as $forum)
+        {
+            $forumTitle = '';
+            try
+            {
+              $forumTitle = \IPS\Member::loggedIn()->language()->get(\IPS\forums\forum::$titleLangPrefix .  $forum->_id);
+            }
+            catch(Exception $ex)
+            {
+              $forumTitle = $forum->_id;
+            }
+            $forums[$forum->_id] = $forumTitle;
+            $forums = TTSettingsGetForumsArray($forums, $forum);
+        }
+    }
+    return $forums;
+}
+  $form->addHeader('tapatalk_general');
+  $form->add( new \IPS\Helpers\Form\Text( 'tapatalk_apikey', \IPS\Settings::i()->tapatalk_apikey ) );
+  $form->add( new \IPS\Helpers\Form\YesNo( 'tapatalk_inappreg', \IPS\Settings::i()->tapatalk_inappreg ) );
+  $form->add( new \IPS\Helpers\Form\YesNo( 'tapatalk_inappregapprove', \IPS\Settings::i()->tapatalk_inappregapprove ) );
+  $groups = array();
+  foreach(\IPS\Member\Group::groups() as $group)
+  {
+      $groups[$group->g_id] = $group->get_formattedName();
+  }
+  $form->add( new \IPS\Helpers\Form\Select( 'tapatalk_usergroup', explode(',', \IPS\Settings::i()->tapatalk_usergroup), FALSE, array('options'=>$groups, 'multiple'=>TRUE)));
+  $form->add( new \IPS\Helpers\Form\Select( 'tapatalk_disableadsforgroup', explode(',', \IPS\Settings::i()->tapatalk_disableadsforgroup) , FALSE, array('options'=>$groups, 'multiple'=>TRUE)));
+  //$form->add( new \IPS\Helpers\Form\Text( 'tapatalk_plugindir', \IPS\Settings::i()->tapatalk_plugindir ) );
+  $forums = TTSettingsGetForumsArray();
+  $form->add( new \IPS\Helpers\Form\Select( 'tapatalk_hideforums', explode(',', \IPS\Settings::i()->tapatalk_hideforums), FALSE, array('options'=>$forums, 'multiple'=>TRUE)));
+  $form->add( new \IPS\Helpers\Form\Select( 'tapatalk_disablenewtopic', explode(',', \IPS\Settings::i()->tapatalk_disablenewtopic), FALSE, array('options'=>$forums, 'multiple'=>TRUE)));
+  $form->add( new \IPS\Helpers\Form\Text( 'tapatalk_threadcontentreplacement', \IPS\Settings::i()->tapatalk_threadcontentreplacement ) );
+
+
+if ( $values = $form->values() )
+{
+	$form->saveAsSettings();
+	return TRUE;
+}
+
+return $form;]]></settingsCode><tasks/><widgets/><htmlFiles><html filename="tapatalk_smartbanner.phtml">PGlwczp0ZW1wbGF0ZSBwYXJhbWV0ZXJzPSIiIC8+DQp7eyR0YXBhdGFsa19kaXIgPSBpc3NldChcSVBTXFNldHRpbmdzOjppKCktPnRhcGF0YWxrX3BsdWdpbmRpcikgPyBcSVBTXFNldHRpbmdzOjppKCktPnRhcGF0YWxrX3BsdWdpbmRpciA6ICdtb2JpcXVvJzt9fQ0Ke3tpbmNsdWRlKFxJUFNcUk9PVF9QQVRIIC4gIi8iIC4gJHRhcGF0YWxrX2RpciAuICIvc21hcnRiYW5uZXIucGhwIik7fX0NCnt7cmV0dXJuIGlzc2V0KCRhcHBfaGVhZF9pbmNsdWRlKSA/ICRhcHBfaGVhZF9pbmNsdWRlIDogJyc7fX0NCg==</html></htmlFiles><cssFiles/><jsFiles/><resourcesFiles/><lang><word key="tapatalk_apikey" js="0">Tapatalk API Key</word><word key="tapatalk_apikey_desc" js="0">Formerly known as Push Key. This key is now required for secure connection between your community and Tapatalk server. Features such as Push Notification and Single Sign-On requires this key to work.</word><word key="tapatalk_inappreg" js="0">In-App Registration</word><word key="tapatalk_inappreg_desc" js="0">Verified Tapatalk users signed in from Facebook, Google or verified email address can register your forum natively in-app. Additional custom fields are also supported, althought we strongly recommend to keep the custom fields to absolute minimal to make registration easier on mobile.</word><word key="tapatalk_inappregapprove" js="0">Automatically Approve Verified Tapatalk Members</word><word key="tapatalk_usergroup" js="0">User Group Assignment</word><word key="tapatalk_usergroup_desc" js="0">You can assign users registered with Tapatalk to specific secondary groups.</word><word key="tapatalk_disableadsforgroup" js="0">Disable Ads for Group</word><word key="tapatalk_disableadsforgroup_desc" js="0">This option will prevent Tapatalk from displaying advertisements. Users in the selected groups will not be served ads when using the Tapatalk app.</word><word key="tapatalk_plugindir" js="0">Tapatalk plugin directory</word><word key="tapatalk_plugindir_desc" js="0">Never change it if you did not rename the Tapatalk plugin directory. And the default value is "mobiquo". If you renamed the Tapatalk plugin directory, you also need to update the same setting for this forum in tapatalk forum owner area.(http://tapatalk.com/landing.php)</word><word key="tapatalk_hideforums" js="0">Hide Forums</word><word key="tapatalk_hideforums_desc" js="0">Hide forums you don't want them to be listed in Tapatalk app.</word><word key="tapatalk_disablenewtopic" js="0">Disable New Topic</word><word key="tapatalk_disablenewtopic_desc" js="0">Prevent Tapatalk users to create new topic in the selected sub-forums. This feature is useful if certain forums requires additional topic fields or permission that Tapatalk does not support.</word><word key="tapatalk_threadcontentreplacement" js="0">Thread Content Replacement (Advanced)</word><word key="tapatalk_threadcontentreplacement_desc" js="0">Ability to match and replace thread content using PHP preg_replace function(http://www.php.net/manual/en/function.preg-replace.php). E.g. "'pattern','replacement'" . You can define more than one replace rule on each line.</word><word key="tapatalk_mobilesmartbanner" js="0">Smart App Banner</word><word key="tapatalk_mobiletwitter" js="0">Twitter</word><word key="tapatalk_mobiletwitter_desc" js="0">Deep-Linking Thread from Link in Twitter App.</word><word key="tapatalk_mobilegoogle" js="0">Google App Indexing</word><word key="tapatalk_mobilegoogle_desc" js="0">Deep-Linking Thread from Google Search Result.</word><word key="tapatalk_mobilefacebook" js="0">Facebook</word><word key="tapatalk_mobilefacebook_desc" js="0">Deep-Linking Thread from Link in Facebook App.</word><word key="tapatalk_spam_disabled" js="0">Disabled</word><word key="tapatalk_spam_sfsinapp" js="0">Enable StopForumSpam in Tapatalk in-app registration</word><word key="tapatalk_group_none" js="0">Forum default</word><word key="tapatalk_general" js="0">Tapatalk options</word></lang><versions><version long="10000" human="1.0.0"><![CDATA[//<?php
+
+
+/* To prevent PHP errors (extending class does not exist) revealing path */
+if ( !defined( '\IPS\SUITE_UNIQUE_KEY' ) )
+{
+	header( ( isset( $_SERVER['SERVER_PROTOCOL'] ) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0' ) . ' 403 Forbidden' );
+	exit;
+}
+
+/**
+ * Install Code
+ */
+class ips_plugins_setup_install
+{
+	/**
+	 * ...
+	 *
+	 * @return	array	If returns TRUE, upgrader will proceed to next step. If it returns any other value, it will set this as the value of the 'extra' GET parameter and rerun this step (useful for loops)
+	 */
+	public function step1()
+	{
+        if(\IPS\Db::i()->checkForColumn('core_members','is_tapatalk_member') == false)
+        {
+            \IPS\Db::i()->addColumn( 'core_members', array(
+            'name'		=> 'is_tapatalk_member',
+            'type'		=> 'BIT',
+            'length'	=> 1,
+            'null'		=> FALSE,
+            'default'	=> 0,
+            'comment'	=> 'If 1, the user used Tapatalk and should receive Tapatalk Push Notifications'
+            ) );
+        }
+		return TRUE;
+	}
+	
+	// You can create as many additional methods (step2, step3, etc.) as is necessary.
+	// Each step will be executed in a new HTTP request
+}]]></version></versions></plugin>

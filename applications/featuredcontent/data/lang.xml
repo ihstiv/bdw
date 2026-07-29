@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language>
+ <app key="featuredcontent" version="44006">
+  <word key="__app_featuredcontent" js="0">Featured Content</word>
+  <word key="menutab__featuredcontent" js="0">Featured Content</word>
+  <word key="menu__featuredcontent_sliders" js="0">Featured Content</word>
+  <word key="menu__featuredcontent_sliders_sliders" js="0">Content Manager</word>
+  <word key="menutab__featuredcontent_icon" js="0">star</word>
+  <word key="fc_slider_sliders" js="0">Content Manager</word>
+  <word key="fcperm_perm__label" js="0"></word>
+  <word key="fcperm_perm__view" js="0">See Slider</word>
+  <word key="fcperm_perm__manage" js="0">Manage Slider</word>
+  <word key="fcperm_perm__add" js="0">Manage Slider</word>
+  <word key="fcs_title" js="0">Name</word>
+  <word key="fcs_showname" js="0">Display name</word>
+  <word key="fcs_shownav" js="0"><![CDATA[Show Pre & Next buttons]]></word>
+  <word key="fcs_showtitle" js="0">Show Title</word>
+  <word key="fcs_showpage" js="0">Show pagers</word>
+  <word key="fcs_method" js="0">Auto get contents from</word>
+  <word key="fcs_method_noauto" js="0">No auto (Creat contents manually)</word>
+  <word key="fcs_method_cms" js="0">Pages</word>
+  <word key="fcs_method_forum" js="0">Forums</word>
+  <word key="fcs_method_rss" js="0">RSS</word>
+  <word key="fcs_rssURL" js="0">RSS URL</word>
+  <word key="fcs_forums" js="0">Choose Forums</word>
+  <word key="fcs_cms_db" js="0">Select one Database</word>
+  <word key="fcs_sortkey" js="0">Sort by</word>
+  <word key="fcs_key_start_date" js="0">Start date</word>
+  <word key="fcs_key_last_updated" js="0">Last updated</word>
+  <word key="fcs_key_id" js="0">ID</word>
+  <word key="fcs_key_title" js="0">Title</word>
+  <word key="fcs_key_views" js="0">Views</word>
+  <word key="fcs_key_rating" js="0">Rating</word>
+  <word key="fcs_sortby" js="0">Order</word>
+  <word key="fcs_bydesc" js="0">Z-A</word>
+  <word key="fcs_byasc" js="0">A-Z</word>
+  <word key="fcs_randomcontent" js="0">Random</word>
+  <word key="fcs_tab_basic" js="0">General</word>
+  <word key="fcs_tab_slider" js="0">Customization</word>
+  <word key="fcs_tab_content" js="0">Contents</word>
+  <word key="fcs_style" js="0">Style</word>
+  <word key="fcs_style_h" js="0">Horizontal</word>
+  <word key="fcs_style_v" js="0">Vertical</word>
+  <word key="fcs_total_items" js="0">Max Contents</word>
+  <word key="fcs_maxSlides" js="0">Max slides</word>
+  <word key="fcs_maxSlides_desc" js="0">The maximum number of slides to be shown. Slides will be sized up if carousel becomes larger than the original size.</word>
+  <word key="fcs_minSlides" js="0">Min slides</word>
+  <word key="fcs_minSlides_desc" js="0">The minimum number of slides to be shown. Slides will be sized down if carousel becomes smaller than the original size.</word>
+  <word key="fcs_img_w" js="0">Image WIDTH (in pixels)</word>
+  <word key="fcs_img_h" js="0">Image HEIGHT (in pixels)</word>
+  <word key="fcs_autoplay" js="0">Autoplay</word>
+  <word key="fcs_speed" js="0">Speed</word>
+  <word key="fcs_speed_desc" js="0">Slide transition duration (in ms).</word>
+  <word key="fcs_duration" js="0">Duration</word>
+  <word key="fcs_duration_desc" js="0">The amount of time (in ms) between each auto transition.</word>
+  <word key="fcs_error_noslider" js="0">This slider is not avaible or you don't have permission to view it</word>
+  <word key="module__featuredcontent_slider" js="0">Featured Content</word>
+  <word key="menu__featuredcontent_sliders_settings" js="0">Settings</word>
+  <word key="block_fcontentWidget" js="0">Slider widget</word>
+  <word key="block_fcontentWidget_desc" js="0">Show your sliders. You need to refresh page to fix slider layout after adding.</word>
+  <word key="sliderID_to_show" js="0">Select one slider to show</word>
+  <word key="fcs_error_nomanaperm" js="0">You do not have permission to do this action</word>
+  <word key="fcs_add" js="0">New</word>
+  <word key="fcs_edit" js="0">Edit</word>
+  <word key="fcc_type" js="0">Action</word>
+  <word key="fcc_edit" js="0">Edit</word>
+  <word key="fcc_remove" js="0">Remove</word>
+  <word key="fcc_image" js="0">Image URL</word>
+  <word key="fcc_url" js="0">Link to</word>
+  <word key="fcc_title" js="0">Title</word>
+  <word key="fcontent_saved" js="0">Saved</word>
+  <word key="fcc_error_noitem" js="0">The content not found</word>
+  <word key="fcc_error_notopic" js="0">The topic not found</word>
+  <word key="fcc_error_notCustom" js="0">Can not manage the auto Slider</word>
+  <word key="fcontent_addfrom" js="0">Featured Content</word>
+  <word key="fcontent_manageSlider" js="0">Customization</word>
+  <word key="fcontent_manageSlider_info" js="0">Drag and drop to sort, click to edit</word>
+  <word key="fcontent_addnew" js="0">Add new</word>
+  <word key="fcontent_noitem" js="0">This slider has no contents.</word>
+  <word key="fcs_viewlinkin" js="0">Open link in</word>
+  <word key="fcs_viewin_current" js="0">Current page</word>
+  <word key="fcs_viewin_page" js="0">New page</word>
+  <word key="fcs_viewin_popup" js="0">Popup</word>
+  <word key="fcs_viewin_popup_desc" js="0">Not support RSS, Gallery and No-auto Slider</word>
+  <word key="fcontent_where_to_show" js="0">Where to show</word>
+  <word key="fcontent_where_to_show_all" js="0">All pages</word>
+  <word key="fcontent_where_to_show_all_desc" js="0">This slider will be shown in all pages (have the same controller)</word>
+  <word key="fcontent_where_to_show_pages" js="0">Page lists</word>
+  <word key="fcontent_where_to_show_pages_desc" js="0">This slider will be shown only in specified pages</word>
+  <word key="fcontent_pages" js="0">Page List</word>
+  <word key="fcontent_pages_desc" js="0"><![CDATA[Enter the url of pages to show the slider.<br>Enter one URL per line.]]></word>
+  <word key="fcontent_noForums" js="0">Forums app hasn't been installed or enabled</word>
+  <word key="fcontent_noVideobox" js="0">Videobox hasn't been installed or enabled</word>
+  <word key="fcontent_noCMS" js="0">Pages app hasn't installed or enabled</word>
+  <word key="fcs_header_content" js="0">Contents</word>
+  <word key="fcs_header_sorting" js="0">Sorting</word>
+  <word key="fcontent_imageOnTheFly" js="0">Image Script URL</word>
+  <word key="fcontent_imageOnTheFly_desc" js="0"><![CDATA[URL to your image resizing script, you can use <a href='https://github.com/mosbth/cimage'>Cimage</a>, <a href='http://phpthumb.sourceforge.net/'>phpThumb</a>,... or any image resizing services.<br> There are 3 required parameters:<br>{url} - image url<br>{width} - image width based on slider's setting<br>{height} - image height based on slider's setting<br><br>Eg:<br><b>http://yourdomain/cimage/webroot/img.php?src={url}&w={width}&h={height}&cf&q=90</b>]]></word>
+  <word key="fcs_key_topic_rating_total" js="0">Rating</word>
+  <word key="fcs_method_gallery" js="0">Gallery</word>
+  <word key="fcs_gallery_cat" js="0">Categories</word>
+  <word key="fcs_videobox_cat" js="0">Categories</word>
+  <word key="fcs_method_videobox" js="0">Videobox</word>
+  <word key="fcontent_noGallery" js="0">Gallery app hasn't been installed or enabled</word>
+  <word key="fcontent_embed" js="0">Embed code</word>
+  <word key="r__sliders" js="0">Sliders</word>
+  <word key="r__sliders_manage" js="0">Can manage Sliders?</word>
+  <word key="fcs_method_downloads" js="0">Downloads</word>
+  <word key="fcontent_noDownloads" js="0">Downloads hasn't been installed or enabled</word>
+  <word key="fcs_downloads_cat" js="0">Categories</word>
+  <word key="filestorage__featuredcontent_Image" js="0">Featured Content</word>
+  <word key="fcc_uploadimg" js="0">Upload image</word>
+  <word key="fcc_imageFrom" js="0">Image from</word>
+  <word key="fc_noitem" js="0">No data found</word>
+  <word key="fcc_moderators" js="0">Moderators</word>
+  <word key="fcc_moderators_desc" js="0">Who can edit this item.</word>
+  <word key="fcs_nolink" js="0">No link</word>
+  <word key="fcs_nolink_desc" js="0">Contents without href link.</word>
+  <word key="fcs_style_fade" js="0">Fade</word>
+  <word key="fcs_easing" js="0">Easing</word>
+  <word key="fcs_skiptopicnoimg" js="0">Ignore items if no image</word>
+  <word key="fcontent_noimg" js="0">Default no image</word>
+  <word key="fcs_featured" js="0">Only show specified contents</word>
+  <word key="fcs_hideinmobile" js="0">Hide in mobile</word>
+  <word key="fcs_getlastimage" js="0">Get last image in last post</word>
+  <word key="fcs_getlastimage_desc" js="0">Turn it off to get the first image in first post.</word>
+  <word key="fcs_truncate" js="0">Truncating title</word>
+  <word key="fcs_truncate_desc" js="0">The lines in title</word>
+  <word key="fcs_margin" js="0">Spacing between images</word>
+  <word key="fcs_noimg" js="0">Default image</word>
+  <word key="fcs_noimg_desc" js="0">Will be displayed if the content has no image.</word>
+  <word key="fcs_ticker" js="0">Ticker mode</word>
+  <word key="fcs_ticker_desc" js="0">Infinite Scrolling through Images. Note that in order to make the ticker appear slower, the speed value must be raised</word>
+  <word key="fcc_newtab" js="0">Open new browser tab</word>
+  <word key="unpinned" js="0">Not pinned</word>
+  <word key="unfeatured" js="0">Not featured</word>
+  <word key="fcontent_resizerMode" js="0">Resize and crop thumnails</word>
+  <word key="fcontent_resizerMode_desc" js="0">PHP allow_url_fopen or curl_init is required</word>
+  <word key="fcc_resizer_no" js="0">No</word>
+  <word key="fcc_resizer_internalfunction" js="0">Resize and crop in center (Recommended)</word>
+  <word key="fcc_resizer_externalscript" js="0">Using external php script to resize</word>
+  <word key="fcontent_ignoreurls" js="0">Ignore images from URL</word>
+  <word key="fcontent_ignoreurls_desc" js="0"><![CDATA[Slider will not load images from urls in list. It's useful to bypass emoticons, small images,..<br><b>One url per line</b>]]></word>
+  <word key="fcs_fromtthumb" js="0">Images from 'Topic Thumbnail' plugin</word>
+  <word key="fcs_fromtthumb_desc" js="0">Requires installed 'Topic Thumbnail' plugin</word>
+  <word key="fcs_tab_images" js="0">Images</word>
+  <word key="fcs_autocontrol" js="0">'Start' / 'Stop' controls</word>
+  <word key="fcs_keyboard" js="0">Keyboard navigation</word>
+  <word key="fcs_header_style" js="0">Style</word>
+  <word key="fcs_header_ani" js="0">Transition</word>
+  <word key="fcs_popup" js="0">View content in popup</word>
+  <word key="fcs_tab_links" js="0">Content's link</word>
+  <word key="fcs_error_noviewperm" js="0">You don't have permission to view this content</word>
+  <word key="fcontent_use_wrapper" js="0">Use widget's wrapper</word>
+  <word key="fcs_title_pos" js="0">Title position</word>
+  <word key="fcs_title_pos_inside" js="0">Inside Image</word>
+  <word key="fcs_title_pos_below" js="0">Below image</word>
+  <word key="fcs_style_grid" js="0">Gridview</word>
+ </app>
+</language>

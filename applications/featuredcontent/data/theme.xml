@@ -1,0 +1,1472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<theme name="Default" author_name="Invision Power Services, Inc" author_url="https://www.invisioncommunity.com">
+ <template template_group="embed" template_name="config" template_data="$slider" template_location="front" template_app="featuredcontent"><![CDATA[<script type='text/javascript'>
+$(document).ready(function() {
+	{{if $slider->ticker && $slider->style != 'vertical'}}
+		$('#Fcontent_{$slider->id} .fcTicker').css({
+			"max-width": $("#sliderWrapper_{$slider->id}").innerWidth(),
+			"max-height": {$slider->tickerHeight},
+			"overflow-y": "hidden",
+		});
+		
+		$('#Fcontent_{$slider->id} .fcTicker').carouselTicker({
+			speed: {expression="$slider->speed/1000"},
+			reverse: false,
+			direction: "prev",
+		});
+		
+		{{if $slider->nolink != 1}}
+			$( "#Fcontent_{$slider->id} .fcTicker a" ).on('click touchstart', function () {
+				window.open( $(this).attr('href'), {{if $slider->viewlinkin == 'page'}}'_blank'{{else}}'_self'{{endif}} ); 
+				return false;
+			});
+		{{endif}} 
+		setTimeout(function(){
+			$("#sliderWrapper_{$slider->id}").css({
+				"opacity": 1,
+				"height": "auto"
+			});
+		}, 300 );
+	{{else}}
+		$('.slider_{$slider->id}').bxSlider({
+			wrapperClass: 'fcWrapper',
+			mode: '{$slider->style}',
+			slideMargin: {$slider->margin},
+			minSlides: {{if $slider->style == 'vertical'}}{$slider->maxSlides}{{else}}{$slider->minSlides}{{endif}},
+			maxSlides: {$slider->maxSlides},
+			{{if $slider->img_w > 0}}
+				slideWidth: {$slider->img_w},			
+			{{endif}}
+			slideHeight: {$slider->img_h},
+			adaptiveHeight: true,
+			auto: {{if $slider->autoplay == 1}}true{{else}}false{{endif}},
+			autoDirection: 'next',
+			autoControls: {{if $slider->autocontrol == 1}}true{{else}}false{{endif}},
+			autoControlsCombine: false,			
+			controls: {{if $slider->shownav == 1}}true{{else}}false{{endif}},
+			keyboardEnabled: {{if $slider->keyboard == 1}}true{{else}}false{{endif}},	
+			autoHover: true,
+			speed: {$slider->speed},
+			ticker: {{if $slider->ticker == 1}}true{{else}}false{{endif}},	
+			tickerHover: true,
+			pause: {$slider->duration},
+			useCSS: false,
+			touchEnabled: false,
+			{{if $slider->easing && $slider->easing != 'none'}}easing: '{$slider->easing}',{{endif}}	
+			pager: {{if $slider->showpage == 1}}true{{else}}false{{endif}},
+			onSliderLoad: function(){
+				setTimeout(function(){
+					$("#sliderWrapper_{$slider->id}").css({
+						"opacity": 1,
+						"height": "auto"
+					});
+				}, 300 );
+			},
+
+		});
+	{{endif}}
+});
+</script>]]></template>
+ <template template_group="embed" template_name="noContent" template_data="$slider" template_location="front" template_app="featuredcontent"><![CDATA[<div id='sliderWrapper_{$slider->id}'>
+	<div class="ipsBox ipsPad ipsType_center">
+		{lang="fcontent_noitem"}
+		{{if $slider->method == 'noauto' AND $slider->can('manage')}}
+			<br><br>
+			<a class='ipsButton ipsButton_medium ipsButton_important ipsButton_small' href="{url="app=featuredcontent&module=slider&controller=view&id={$slider->id}"}">
+				<i class="fa fa-plus"></i> {lang="fcontent_addnew"}
+			</a>
+		{{endif}}
+	</div>
+</div>	]]></template>
+ <template template_group="embed" template_name="popup_cms" template_data="$record" template_location="front" template_app="featuredcontent"><![CDATA[<div class='ipsPad'>
+	<div class='ipsPageHeader ipsClearfix'>
+		<h1 class='ipsType_pageTitle ipsContained_container'>
+			{{if $record->locked()}}<span><i class='fa fa-lock'></i></span> {{endif}}
+
+			{{if $record->isFutureDate() || $record->mapped('pinned') || $record->mapped('featured') || $record->hidden() === -1 || $record->hidden() === 1 || $record->hidden() === -2}}
+				{{if $record->isFutureDate()}}
+					<span><span class="ipsBadge ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{$record->futureDateBlurb()}'><i class='fa fa-clock-o'></i></span></span>
+				{{elseif $record->hidden() === -1}}
+					<span><span class="ipsBadge ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{$record->hiddenBlurb()}'><i class='fa fa-eye-slash'></i></span></span>
+				{{elseif $record->hidden() === -2}}
+					<span><span class="ipsbadge ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{$record->deletedBlurb()}'><i class='fa fa-trash'></i></span></span>
+				{{elseif $record->hidden() === 1}}
+					<span><span class="ipsBadge ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{lang="pending_approval"}'><i class='fa fa-warning'></i></span></span>
+				{{endif}}
+				{{if $record->mapped('pinned')}}
+					<span><span class="ipsBadge ipsBadge_icon ipsBadge_positive" data-ipsTooltip title='{lang="pinned"}'><i class='fa fa-thumb-tack'></i></span></span>
+				{{endif}}
+				{{if $record->mapped('featured')}}
+					<span><span class="ipsBadge ipsBadge_icon ipsBadge_positive" data-ipsTooltip title='{lang="featured"}'><i class='fa fa-star'></i></span></span>
+				{{endif}}
+			{{endif}}
+			
+			{{if $record->prefix() OR ( $record->canEdit() AND $record::canTag( NULL, $record->container() ) AND $record::canPrefix( NULL, $record->container() ) )}}
+				<span {{if !$record->prefix()}}class='ipsHide'{{endif}} {{if ( $record->canEdit() AND $record::canTag( NULL, $record->container() ) AND $record::canPrefix( NULL, $record->container() ) )}}data-editablePrefix{{endif}}>
+					{template="prefix" group="global" app="core" params="$record->prefix( TRUE ), $record->prefix()"}
+				</span>
+			{{endif}}
+			{{if $record->canEditTitle()}}
+				<span class='ipsType_break ipsContained' data-controller="core.front.core.moderation">
+					<span data-role="editableTitle" title='{lang="click_hold_edit"}'><a href='{$record->url()}' title='{$record->_title}'>{$record->_title}</a></span>
+				</span>
+			{{else}}
+				<span class='ipsType_break ipsContained'><a href='{$record->url()}' title='{$record->_title}'>{$record->_title}</a></span>
+			{{endif}}
+		</h1>
+		
+		{{if $record::database()->options['reviews']}}
+			<div>
+				{template="rating" group="global" location="front" app="core" params="'large', $record->averageReviewRating(), \IPS\Settings::i()->reviews_rating_out_of, $record->memberReviewRating()"}&nbsp;&nbsp; <span class='ipsType_normal ipsType_light'>({lang="num_reviews" pluralize="$record->record_reviews"})</span>
+			</div>
+		{{elseif $record->container()->allow_rating}}
+			<div>{$record->rating()|raw}</div>
+		{{endif}}	
+	</div>
+
+	<hr class='ipsHr'>
+
+	<div class='ipsPhotoPanel ipsPhotoPanel_tiny ipsClearfix ipsSpacer_bottom'>
+		{template="userPhoto" app="core" group="global" params="$record->author(), 'tiny', $record->warningRef()"}
+		<div>
+			<p class='ipsType_reset ipsType_large ipsType_blendLinks'>
+				{lang="content_record_started_by" htmlsprintf="$record->author()->link()"}
+				{{if $record->editLine()}}
+					<span class='ipsType_light ipsType_medium ipsType_reset'>
+						({lang="edited_lc"})
+					</span>
+				{{endif}}
+			</p>
+			<ul class='ipsList_inline'>
+				<li>{datetime="$record->record_publish_date"}</li>
+				{{foreach $record->customFieldsForDisplay('display_top') as $fieldId => $fieldValue}}
+					{{if $fieldValue}}
+						{$fieldValue|raw}
+					{{endif}}
+				{{endforeach}}
+			</ul>
+		</div>
+	</div>	
+
+	{{if \count( $record->tags() ) OR ( $record->canEdit() AND $record::canTag( NULL, $record->container() ) )}}
+		{template="tags" group="global" app="core" params="$record->tags(), FALSE, FALSE, ( $record->canEdit() AND $record::canTag( NULL, $record->container() ) ) ? $record->url() : NULL"}
+	{{endif}}	
+
+	{template="contentItemMessages" group="global" app="core" params="$record->getMessages(), $record"}
+
+	<article class='ipsContained ipsSpacer_top ipsBox ipsPad'>
+		<div class='ipsClearfix'>
+			{{if $record->record_image}}
+				<div class="cCmsRecord_image">
+					<img class="ipsImage" src="{file="$record->_record_image_thumb" extension="cms_Records"}">
+				</div>
+			{{endif}}
+			<section class="ipsType_richText ipsType_normal" data-controller='core.front.core.lightboxedImages'>{$record->_content|raw}</section>
+			
+			{{if $record->editLine()}}
+				{$record->editLine()|raw}
+			{{endif}}
+			
+			{{if $records = $record->getReciprocalItems()}}
+				<br>
+				{{foreach $records as $fieldId => $items}}
+					{{$infoLineShown = FALSE;}}
+					<ul class="ipsList_inline ipsList_csv ipsList_noSpacing">
+					{{foreach $items as $item}}
+						<li>{{if ! $infoLineShown}}{{$infoLineShown=TRUE;}}{lang="records_linking_to_me" sprintf="$item::database()->recordWord(0,TRUE), $record::database()->recordWord(1)"}: {{endif}}<a href="{$item->url()}">{$item->_title}</a></li>
+					{{endforeach}}
+					</ul>
+				{{endforeach}}
+			{{endif}}
+		</div>
+		{{if $bottomFields = $record->customFieldsForDisplay('display_bottom')}}
+			<hr class='ipsHr ipsClear ipsClearfix'>
+			{{foreach $bottomFields as $fieldId => $fieldValue}}
+				{{if $fieldValue}}
+					{$fieldValue|raw}
+				{{endif}}
+			{{endforeach}}
+		{{endif}}
+		
+		<div class='ipsItemControls'>
+			{{if \IPS\IPS::classUsesTrait( $record, 'IPS\Content\Reactable' ) and settings.reputation_enabled}}
+				{template="reputation" app="core" group="global" params="$record"}
+			{{endif}}
+			<ul class='ipsToolList ipsToolList_horizontal ipsPos_left ipsClearfix ipsResponsive_noFloat ipsItemControls_left'>
+				{{if ( $record->isFutureDate() or $record->canPin() or $record->canUnpin() or $record->canFeature() or $record->canUnfeature() or $record->canHide() or $record->canUnhide() or $record->canMove() or $record->canLock() or $record->canUnlock() or $record->canDelete() ) or ( $record->hidden() == -2 AND \IPS\Member::loggedIn()->modPermission('can_manage_deleted_content'))}}
+					<li>
+						<a href='#elentryActions_menu' id='elentryActions' class='ipsButton ipsButton_light ipsButton_verySmall ipsButton_fullWidth' data-ipsMenu>{lang="content_record_actions" sprintf="$record::database()->recordWord( 1, TRUE )"} <i class='fa fa-caret-down'></i></a>
+						<ul id='elentryActions_menu' class='ipsMenu ipsMenu_auto ipsHide'>
+							{{if \IPS\Member::loggedIn()->modPermission('can_manage_deleted_content') AND $record->hidden() == -2}}
+								<li class='ipsMenu_item'><a href='{$record->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'restore' ) )}' data-confirm data-confirmSubMessage='{lang="restore_as_visible_desc"}'>{lang="restore_as_visible"}</a></li>
+								<li class='ipsMenu_item'><a href='{$record->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'restoreAsHidden' ) )}' data-confirm data-confirmSubMessage='{lang="restore_as_hidden_desc"}'>{lang="restore_as_hidden"}</a></li>
+								<li class='ipsMenu_item'><a href='{$record->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'delete', 'immediate' => 1 ) )}' data-confirm data-confirmSubMessage='{lang="delete_immediately_desc"}'>{lang="delete_immediately"}</a></li>
+							{{else}}
+								{{if $record->isFutureDate() and $record::canFuturePublish( NULL, $record->container() )}}
+									<li class='ipsMenu_item'><a href='{$record->url('moderate')->csrf()->setQueryString( array( 'action' => 'publish' ) )}' data-confirm title='{lang="publish_now"}'>{lang="publish"}</a></li>
+								{{endif}}
+								{{if $record->canFeature()}}
+									<li class='ipsMenu_item'><a href='{$record->url('moderate')->csrf()->setQueryString( array( 'action' => 'feature' ) )}' title='{lang="feature_title_record" sprintf="$record::database()->recordWord(1)"}'>{lang="feature"}</a></li>
+								{{endif}}
+								{{if $record->canUnfeature()}}				
+									<li class='ipsMenu_item'><a href='{$record->url('moderate')->csrf()->setQueryString( array( 'action' => 'unfeature' ) )}' title='{lang="unfeature_title_record" sprintf="$record::database()->recordWord(1)"}'>{lang="unfeature"}</a></li>
+								{{endif}}
+								{{if $record->canPin()}}				
+									<li class='ipsMenu_item'><a href='{$record->url('moderate')->csrf()->setQueryString( array( 'action' => 'pin' ) )}' title='{lang="pin_title_record" sprintf="$record::database()->recordWord(1)"}'>{lang="pin"}</a></li>
+								{{endif}}
+								{{if $record->canUnpin()}}				
+									<li class='ipsMenu_item'><a href='{$record->url('moderate')->csrf()->setQueryString( array( 'action' => 'unpin' ) )}' title='{lang="unpin_title_record" sprintf="$record::database()->recordWord(1)"}'>{lang="unpin"}</a></li>
+								{{endif}}
+								{{if $record->canHide()}}				
+									<li class='ipsMenu_item'><a href='{$record->url('moderate')->csrf()->setQueryString( array( 'action' => 'hide' ) )}' title='{lang="hide_title_record" sprintf="$record::database()->recordWord(1)"}' data-ipsDialog data-ipsDialog-title="{lang="hide"}">{lang="hide"}</a></li>
+								{{endif}}
+								{{if $record->canUnhide()}}				
+									<li class='ipsMenu_item'><a href='{$record->url('moderate')->csrf()->setQueryString( array( 'action' => 'unhide' ) )}' title='{{if $record->hidden() === 1}}{lang="approve_title_record" sprintf="$record::database()->recordWord(1)"}{{else}}{lang="unhide_title_record" sprintf="$record::database()->recordWord(1)"}{{endif}}'>{{if $record->hidden() === 1}}{lang="approve"}{{else}}{lang="unhide"}{{endif}}</a></li>
+								{{endif}}
+								{{if $record->canLock()}}				
+									<li class='ipsMenu_item'><a href='{$record->url('moderate')->csrf()->setQueryString( array( 'action' => 'lock' ) )}' title='{lang="lock_title_record" sprintf="$record::database()->recordWord(1)"}'>{lang="lock"}</a></li>
+								{{endif}}
+								{{if $record->canUnlock()}}				
+									<li class='ipsMenu_item'><a href='{$record->url('moderate')->csrf()->setQueryString( array( 'action' => 'unlock' ) )}' title='{lang="unlock_title_record" sprintf="$record::database()->recordWord(1)"}'>{lang="unlock"}</a></li>
+								{{endif}}
+								{{if $record->canMove()}}				
+									<li class='ipsMenu_item'><a href='{$record->url('move')->csrf()}' data-ipsDialog data-ipsDialog-title="{lang="move"}"  title='{lang="move_title_record" sprintf="$record::database()->recordWord(1)"}'>{lang="move"}</a></li>
+								{{endif}}
+								{{if $record->canDelete()}}				
+									<li class='ipsMenu_item'><a href='{$record->url('moderate')->csrf()->setQueryString( array( 'action' => 'delete' ) )}' data-confirm  title='{lang="delete_title_record" sprintf="$record::database()->recordWord(1)"}'>{lang="delete"}</a></li>
+								{{endif}}
+								{{if $record->canOnMessage( 'add' )}}
+									<li class='ipsMenu_item'><a href='{$record->url('messageForm')->csrf()}' data-ipsDialog data-ipsDialog-title='{lang="add_message"}'>{lang="add_message"}</a></li>
+								{{endif}}
+								{{if \IPS\Member::loggedIn()->modPermission('can_view_moderation_log')}}
+									<li class='ipsMenu_sep'><hr></li>
+									<li class="ipsMenu_item"><a href='{$record->url()->csrf()->setQueryString( array( 'do' => 'modLog' ) )}' data-ipsDialog data-ipsDialog-title='{lang="moderation_history"}'>{lang="moderation_history"}</a></li>
+								{{endif}}
+							{{endif}}
+						</ul>
+					</li>
+				{{endif}}
+				{{if $record->canEdit()}}
+					<li><a href='{$record->url('edit')->csrf()}' title='{lang="edit"}' class='ipsButton ipsButton_verySmall ipsButton_link ipsButton_fullWidth'>{lang="edit"}</a></li>
+				{{endif}}
+				{{if $record->canReport()}}
+					<li><a href='{$record->url('report')}' class='ipsButton ipsButton_verySmall ipsButton_link ipsButton_fullWidth' data-ipsDialog data-ipsDialog-size='medium' data-ipsDialog-title="{lang="content_record_report" sprintf="$record::database()->recordWord( 1, TRUE )"}" data-ipsDialog-remoteSubmit data-ipsDialog-flashMessage="{lang="report_submit_success"}" title="{lang="content_record_report" sprintf="$record::database()->recordWord( 1, TRUE )"}">{lang="content_record_report" sprintf="$record::database()->recordWord( 1, TRUE )"}</a></li>
+				{{endif}}
+				{{if $record->canManageRevisions()}}
+					<li><a href='{$record->url('revisions')}' class='ipsButton ipsButton_verySmall ipsButton_link ipsButton_fullWidth' title="{lang="content_view_revisions"}">{lang="content_view_revisions"}</a></li>
+				{{endif}}
+			</ul>
+		</div>
+	</article>
+</div>]]></template>
+ <template template_group="embed" template_name="popup_downloads" template_data="$file, $cfields=array()" template_location="front" template_app="featuredcontent"><![CDATA[<div class='ipsPad'>
+	<div class='{{if $file->primary_screenshot}}ipsColumns ipsColumns_collapsePhone{{endif}} ipsClearfix'>
+		<div {{if $file->primary_screenshot_thumb}}class='ipsColumn ipsColumn_fluid'{{endif}}>
+			<div class='ipsPageHeader ipsClearfix ipsSpacer_bottom'>
+				<h1 class='ipsType_pageTitle ipsContained_container'>
+					{{if $file->prefix() OR ( $file->canEdit() AND $file::canTag( NULL, $file->container() ) AND $file::canPrefix( NULL, $file->container() ) )}}
+						<span {{if !$file->prefix()}}class='ipsHide'{{endif}} {{if ( $file->canEdit() AND $file::canTag( NULL, $file->container() ) AND $file::canPrefix( NULL, $file->container() ) )}}data-editablePrefix{{endif}}>
+							{template="prefix" group="global" app="core" params="$file->prefix( TRUE ), $file->prefix()"}
+						</span>
+					{{endif}}
+					
+					{{if $file->hidden() === 1}}
+						<span><span class="ipsBadge ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{lang="pending_approval"}'><i class='fa fa-warning'></i></span></span>
+					{{elseif $file->hidden() === -1}}
+						<span><span class="ipsBadge ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{$file->hiddenBlurb()}'><i class='fa fa-eye-slash'></i></span></span>
+					{{elseif $file->hidden() === -2}}
+						<span><span class="ipsBadge ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{$file->deletedBlurb()}'><i class='fa fa-trash'></i></span></span>
+					{{endif}}
+					{{if $file->mapped('featured')}}
+						<span><span class="ipsBadge ipsBadge_icon ipsBadge_positive" data-ipsTooltip title='{lang="featured"}'><i class='fa fa-star'></i></span></span>
+					{{endif}}
+					{{if $file->canEdit()}}
+						<span class='ipsType_break ipsContained' data-controller="core.front.core.moderation">
+							{{if $file->locked()}}<i class='fa fa-lock'></i> {{endif}}<span data-role="editableTitle" title="{lang="click_hold_edit"}"><a href="{$file->url()}" title="{$file->name}">{$file->name}</a></span> {$file->version}
+						</span>
+					{{else}}
+						<span class='ipsType_break ipsContained'>{{if $file->locked()}}<i class='fa fa-lock'></i> {{endif}}{$file->name} {$file->version}</span>
+					{{endif}}
+				</h1>
+
+				{{if $file->isPaid()}}
+					<p class="ipsType_pageTitle ipsType_reset ipsSpacer_top ipsSpacer_half">
+						{{if $price = $file->price()}}
+							<span class='cFilePrice'>{$price|raw}</span>
+							{{if $renewalTerm = $file->renewalTerm()}}
+								<span class='ipsType_light'>&middot; {lang="file_renewal_term_val" sprintf="$renewalTerm"}</span>
+							{{endif}}
+						{{endif}}
+					</p>
+				{{endif}}
+
+				{{if $file->container()->bitoptions['reviews']}}
+					<div>
+						{template="rating" group="global" location="front" app="core" params="'large', $file->averageReviewRating(), \IPS\Settings::i()->reviews_rating_out_of, $file->memberReviewRating()"}&nbsp;&nbsp; <span class='ipsType_normal ipsType_light'>({lang="num_reviews" pluralize="$file->reviews"})</span>
+					</div>
+				{{endif}}
+			</div>
+			<hr class='ipsHr ipsResponsive_hidePhone'>
+
+			<div class='ipsPhotoPanel ipsPhotoPanel_tiny ipsClearfix ipsSpacer_bottom'>
+				{template="userPhoto" app="core" group="global" params="$file->author(), 'tiny', $file->warningRef()"}
+				<div>
+					<p class='ipsType_reset ipsType_large ipsType_blendLinks'>
+						{lang="byline_nodate_itemprop" htmlsprintf="$file->author()->link( $file->warningRef() )"}{{if member.group['idm_view_approvers'] and $file->approver}} {lang="file_approved_by" sprintf="\IPS\Member::load( $file->approver )->name" htmlsprintf="\IPS\DateTime::ts( $file->approvedon )->html()"}{{endif}}
+					</p>
+					{{if $file->author()->member_id OR $file->canChangeAuthor()}}
+					<ul class='ipsList_inline'>
+						{{if $file->author()->member_id}}
+							<li><a href='{url="app=core&module=members&controller=profile&id={$file->author()->member_id}&do=content&type=downloads_file" base="front" seoTitles="$file->author()->members_seo_name" seoTemplate="profile_content"}'>{lang="find_users_files"}</a></li>
+						{{endif}}
+						{{if $file->canChangeAuthor()}}
+							<li><a href='{$file->url()->setQueryString( array( 'do' => 'changeAuthor' ) )}' data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-title="{lang="change_author_d"}" title='{lang="change_author_title"}'>{lang="change_author_d"}</a></li>
+						{{endif}}
+					</ul>
+					{{endif}}
+				</div>
+			</div>	
+
+			{{if \count( $file->tags() ) OR ( $file->canEdit() AND $file::canTag( NULL, $file->container() ) )}}
+				{template="tags" group="global" app="core" params="$file->tags(), FALSE, FALSE, ( $file->canEdit() AND $file::canTag( NULL, $file->container() ) ) ? $file->url() : NULL"}
+			{{endif}}
+		</div>
+
+	</div>
+
+	{template="contentItemMessages" group="global" app="core" params="$file->getMessages(), $file"}
+	
+	{{if $file->hidden() === 1 and $file->canUnhide()}}
+		<div class="ipsMessage ipsMessage_warning ipsSpacer_both">
+			<p class="ipsType_reset">{lang="file_pending_approval"}</p>
+			<br>
+			<ul class='ipsList_inline'>
+				<li><a href="{$file->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unhide' ) )}" class="ipsButton ipsButton_positive ipsButton_verySmall" title='{lang="approve_title_file"}'><i class="fa fa-check"></i> {lang="approve"}</a></li>
+				{{if $file->canDelete()}}
+					<li><a href='{$file->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'delete' ) )}' data-confirm  title='{lang="downloads_delete_title"}' class='ipsButton ipsButton_negative ipsButton_verySmall'><i class='fa fa-times'></i> {lang="delete"}</a></li>
+				{{endif}}
+			</ul>
+		</div>
+	{{endif}}
+
+	<div class='ipsBox ipsSpacer_top ipsSpacer_double'>
+		{{if $file->screenshots()->getInnerIterator()->count( true )}}
+			<section>
+				<h2 class='ipsType_sectionTitle ipsType_reset ipsHide'>{lang="screenshots_ct" pluralize="$file->screenshots()->getInnerIterator()->count( true )"}</h2>
+				<div class='ipsPad ipsAreaBackground'>
+					<div class='ipsCarousel ipsClearfix' data-ipsCarousel data-ipsCarousel-showDots>
+						<div class='ipsCarousel_inner'>
+							<ul class='cDownloadsCarousel ipsClearfix' data-role="carouselItems">
+								{{$fullScreenshots = iterator_to_array( $file->screenshots() );}}
+								{{foreach $file->screenshots( 1 ) as $id => $screenshot}}
+									<li class='ipsCarousel_item ipsAreaBackground_reset ipsPad_half'>
+										<span style="background-image: url( '{expression="str_replace( array( '(', ')' ), array( '\(', '\)' ), $screenshot->url )"}' )" class="ipsThumb ipsThumb_medium ipsThumb_bg ipsCursor_pointer" data-ipsLightbox data-ipsLightbox-group="download_{$file->id}" data-fullURL="{$fullScreenshots[ $id ]->url}">
+											<img src="{$screenshot->url}" alt="">
+										</span>
+									</li>
+								{{endforeach}}
+							</ul>
+						</div>
+						<span class='ipsCarousel_shadow ipsCarousel_shadowLeft'></span>
+						<span class='ipsCarousel_shadow ipsCarousel_shadowRight'></span>
+						<a href='#' class='ipsCarousel_nav ipsHide' data-action='prev'><i class='fa fa-chevron-left'></i></a>
+						<a href='#' class='ipsCarousel_nav ipsHide' data-action='next'><i class='fa fa-chevron-right'></i></a>
+					</div>
+				</div>
+			</section>
+		{{endif}} 
+		<div class='ipsColumns ipsColumns_collapsePhone'>
+			<article class='ipsColumn ipsColumn_fluid'>
+				<div class='ipsPad'>
+					<h2 class='ipsType_sectionHead'>{lang="file_desc"}</h2>
+					<section class='ipsType_normal ipsSpacer_top'>
+						<div class='ipsType_richText ipsContained ipsType_break' itemprop='text' data-controller='core.front.core.lightboxedImages'>
+							{$file->content()|raw}
+						</div>
+
+						{{if $versionData['b_changelog'] or !empty( $previousVersions )}}
+							<hr class='ipsHr ipsSpacer_both ipsSpacer_double'>
+							<section data-controller='downloads.front.view.changeLog'>
+								<h2 class='ipsType_sectionHead'>{lang="whats_new_in_version" sprintf="$versionData['b_version']"}{{if !empty( $previousVersions )}} &nbsp;&nbsp;<a href='#' id='elChangelog' data-ipsMenu data-ipsMenu-selectable="radio" class='ipsButton ipsButton_verySmall ipsButton_light' title='{lang="see_changelog_title"}'>{lang="see_changelog"} <i class='fa fa-caret-down'></i></a>{{endif}}</h2>
+
+								<div data-role='changeLogData'>
+									{template="changeLog" group="view" params="$file, $versionData"}
+								</div>
+								<ul class='ipsMenu ipsMenu_selectable ipsMenu_auto ipsHide' id='elChangelog_menu'>
+									<li class='ipsMenu_item {{if !request.changelog}}ipsMenu_itemChecked{{endif}}' data-ipsMenuValue='{$file->version}'><a href='{$file->url()->setQuerystring( 'changelog', 0 )}' title='{lang="see_changelog_for" sprintf="$file->version"}'>{$file->version}</a></li>
+									{{foreach $previousVersions as $version}}
+										<li class='ipsMenu_item {{if request.changelog == $version['b_id']}}ipsMenu_itemChecked{{endif}} {{if $version['b_hidden']}}ipsModerated{{endif}}' data-ipsMenuValue='{expression="md5( $version['b_version'] . $version['b_backup'] . mt_rand() )"}' data-changelogTitle="{$version['b_version']}">
+											<a href='{$file->url()->setQueryString( 'changelog', $version['b_id'] )}' title='{lang="see_changelog_for" sprintf="$version['b_version']"}'>
+												{$version['b_version']}<br>
+												<span class='ipsType_light'>{expression="\IPS\DateTime::ts( $version['b_backup'] )->html()" raw="true"}</span>
+											</a>
+										</li>
+									{{endforeach}}
+								</ul>
+							</section>
+						{{endif}}
+
+						{{if ( $file->canEdit() or $file->canPin() or $file->canUnpin() or $file->canFeature() or $file->canUnfeature() or $file->canHide() or $file->canUnhide() or $file->canMove() or $file->canLock() or $file->canUnlock() or $file->canDelete() ) or ( $file->hidden() == -2 AND \IPS\Member::loggedIn()->modPermission('can_manage_deleted_content') ) || ( \IPS\IPS::classUsesTrait( $file, 'IPS\Content\Reactable' ) and settings.reputation_enabled )}}
+							<div class='ipsItemControls'>
+								{{if \IPS\IPS::classUsesTrait( $file, 'IPS\Content\Reactable' ) and settings.reputation_enabled}}
+									{template="reputation" app="core" group="global" params="$file"}
+								{{endif}}
+								{{if ( $file->canEdit() or $file->canPin() or $file->canUnpin() or $file->canFeature() or $file->canUnfeature() or $file->canHide() or $file->canUnhide() or $file->canMove() or $file->canLock() or $file->canUnlock() or $file->canDelete() ) or ( $file->hidden() == -2 AND \IPS\Member::loggedIn()->modPermission('can_manage_deleted_content') ) || \IPS\Member::loggedIn()->group['g_can_report']}}
+									<ul class='ipsToolList ipsToolList_horizontal ipsPos_left ipsClearfix ipsResponsive_noFloat ipsItemControls_left'>
+										{{if ( $file->canEdit() or $file->canPin() or $file->canUnpin() or $file->canFeature() or $file->canUnfeature() or $file->canHide() or $file->canUnhide() or $file->canMove() or $file->canLock() or $file->canUnlock() or $file->canDelete() ) or ( $file->hidden() == -2 AND \IPS\Member::loggedIn()->modPermission('can_manage_deleted_content') )}}
+											<li>
+												<a href='#elFileActions_menu' id='elFileActions' class='ipsButton ipsButton_light ipsButton_verySmall ipsButton_fullWidth' data-ipsMenu>{lang="file_actions"} <i class='fa fa-caret-down'></i></a>
+												<ul id='elFileActions_menu' class='ipsMenu ipsMenu_auto ipsHide'>
+													{{if \IPS\Member::loggedIn()->modPermission('can_manage_deleted_content') AND $file->hidden() == -2}}
+														<li class='ipsMenu_item'><a href='{$file->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'restore' ) )}' data-confirm data-confirmSubMessage='{lang="restore_as_visible_desc"}'>{lang="restore_as_visible"}</a></li>
+														<li class='ipsMenu_item'><a href='{$file->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'restoreAsHidden' ) )}' data-confirm data-confirmSubMessage='{lang="restore_as_hidden_desc"}'>{lang="restore_as_hidden"}</a></li>
+														<li class='ipsMenu_item'><a href='{$file->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'delete', 'immediate' => 1 ) )}' data-confirm data-confirmSubMessage='{lang="delete_immediately_desc"}'>{lang="delete_immediately"}</a></li>
+													{{else}}
+														{{if $file->canEdit()}}				
+															<li class='ipsMenu_item'><a href='{$file->url()->setQueryString( array( 'do' => 'newVersion' ) )}' title='{lang="upload_new_version_title"}'>{lang="upload_new_version"}</a></li>
+															<li class='ipsMenu_item'><a href='{$file->url()->setQueryString( array( 'do' => 'edit' ) )}' title='{lang="downloads_edit_details_title"}'>{lang="downloads_edit_details"}</a></li>
+														{{endif}}
+														{{if $file->canFeature()}}				
+															<li class='ipsMenu_item'><a href='{$file->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'feature' ) )}' title='{lang="feature_title_file"}'>{lang="feature"}</a></li>
+														{{endif}}
+														{{if $file->canUnfeature()}}				
+															<li class='ipsMenu_item'><a href='{$file->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unfeature' ) )}' title='{lang="unfeature_title_file"}'>{lang="unfeature"}</a></li>
+														{{endif}}
+														{{if $file->canPin()}}				
+															<li class='ipsMenu_item'><a href='{$file->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'pin' ) )}' title='{lang="pin_title_file"}'>{lang="pin"}</a></li>
+														{{endif}}
+														{{if $file->canUnpin()}}				
+															<li class='ipsMenu_item'><a href='{$file->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unpin' ) )}' title='{lang="unpin_title_file"}'>{lang="unpin"}</a></li>
+														{{endif}}
+														{{if $file->canHide()}}				
+															<li class='ipsMenu_item'><a href='{$file->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'hide' ) )}' title='{lang="hide_title_file"}' data-ipsDialog data-ipsDialog-title="{lang="hide"}">{lang="hide"}</a></li>
+														{{endif}}
+														{{if $file->canUnhide()}}				
+															<li class='ipsMenu_item'><a href='{$file->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unhide' ) )}' title='{{if $file->hidden() === 1}}{lang="approve_title_file"}{{else}}{lang="unhide_title_file"}{{endif}}'>{{if $file->hidden() === 1}}{lang="approve"}{{else}}{lang="unhide"}{{endif}}</a></li>
+														{{endif}}
+														{{if $file->canLock()}}				
+															<li class='ipsMenu_item'><a href='{$file->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'lock' ) )}' title='{lang="lock_title_file"}'>{lang="lock"}</a></li>
+														{{endif}}
+														{{if $file->canUnlock()}}				
+															<li class='ipsMenu_item'><a href='{$file->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unlock' ) )}' title='{lang="unlock_title_file"}'>{lang="unlock"}</a></li>
+														{{endif}}
+														{{if $file->canMove()}}				
+															<li class='ipsMenu_item'><a href='{$file->url()->setQueryString( array( 'do' => 'move' ) )}' data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-title="{lang="move"}"  title='{lang="downloads_move_title"}'>{lang="move"}</a></li>
+														{{endif}}
+														{{if $file->canDelete()}}				
+															<li class='ipsMenu_item'><a href='{$file->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'delete' ) )}' data-confirm  title='{lang="downloads_delete_title"}'>{lang="delete"}</a></li>
+														{{endif}}
+														{{if $file->canOnMessage( 'add' )}}
+															<li class='ipsMenu_item'><a href='{$file->url()->csrf()->setQueryString( array( 'do' => 'messageForm' ) )}' data-ipsDialog data-ipsDialog-title='{lang="add_message"}'>{lang='add_message'}</a></li>
+														{{endif}}
+														{{if \IPS\Member::loggedIn()->modPermission('can_view_moderation_log')}}
+															<li class='ipsMenu_sep'><hr></li>
+															<li class="ipsMenu_item"><a href='{$file->url()->csrf()->setQueryString( array( 'do' => 'modLog' ) )}' data-ipsDialog data-ipsDialog-title='{lang="moderation_history"}'>{lang="moderation_history"}</a></li>
+														{{endif}}
+													{{endif}}
+												</ul>
+											</li>
+										{{endif}}
+
+										{{if $file->canReport()}}
+											<li>
+												<a href='{$file->url('report')}' data-ipsDialog data-ipsDialog-size='medium' data-ipsDialog-title="{lang="report_file"}" data-ipsDialog-remoteSubmit data-ipsDialog-flashMessage="{lang="report_submit_success"}" title="{lang="report_file"}" class='ipsButton ipsButton_link ipsButton_verySmall ipsButton_fullWidth'>{lang="report_file"}</a>
+											</li>
+										{{endif}}
+									</ul>
+								{{endif}}
+							</div>
+						{{endif}}
+					</section>
+				</div>
+			</article>
+			<aside class='ipsColumn ipsColumn_wide'>
+				<div class='ipsPad'>
+					<ul class="ipsToolList ipsToolList_vertical ipsClearfix">
+						{{if $file->canBuy()}}
+							{{if $file->canDownload()}}
+								{template="downloadButton" group="view" app="downloads" params="$file"}
+							{{endif}}
+							<li class='ipsToolList_primaryAction'>
+								<a href='{$file->url('buy')->csrf()}' class='ipsButton ipsButton_fullWidth ipsButton_large ipsButton_important'><i class='fa fa-shopping-cart'></i> &nbsp;{lang="buy_now"}{{if $price = $file->price()}} - {$price|raw}{{endif}}</a>
+							</li>
+						{{else}}
+							{{if $file->canDownload() or !$file->downloadTeaser()}}
+								{template="downloadButton" group="view" app="downloads" params="$file"}
+							{{else}}
+								{$file->downloadTeaser()|raw}
+							{{endif}}
+						{{endif}}
+						{{if ( isset( $purchasesToRenew ) or $purchasesToRenew = $file->purchasesToRenew() ) and \count( $purchasesToRenew )}}
+							<li class='ipsToolList_primaryAction'>
+								{{if \count( $purchasesToRenew ) === 1}}
+									{{foreach $purchasesToRenew as $purchase}}
+										<a href='{$purchase->url()->setQueryString('do', 'renew')->csrf()}' class='ipsButton ipsButton_fullWidth ipsButton_large ipsButton_important'><i class='fa fa-refresh'></i> &nbsp;{lang="purchase_renew_now"} - {$purchase->renewals->cost}</a>
+									{{endforeach}}
+								{{else}}
+									<a href='#elFileRenew_menu' id='elFileRenew' class='ipsButton ipsButton_fullWidth ipsButton_large ipsButton_important' data-ipsMenu><i class='fa fa-refresh'></i> &nbsp;{lang="purchase_renew_now"} <i class="fa fa-caret-down"></i></a>
+									<ul id='elFileRenew_menu' class='ipsMenu ipsMenu_auto ipsHide'>
+										{{foreach $purchasesToRenew as $purchase}}
+											<li class='ipsMenu_item'><a href="{$purchase->url()->setQueryString('do', 'renew')->csrf()}">{$purchase->name}<br><span class='ipsType_light'>{$purchase->renewals}</span></a></li>
+										{{endforeach}}
+									</ul>		
+								{{endif}}						
+							</li>
+						{{endif}}
+					</ul>
+					<hr class='ipsHr'>
+
+				{{if $file->topic()}}
+					<a href='{$file->topic()->url()}' title='{lang="dl_get_support_title"}' class='ipsButton ipsButton_normal ipsButton_fullWidth'>{lang="dl_get_support"}</a>
+					<br>
+				{{endif}}
+				<h2 class='ipsType_sectionHead'>{lang="file_information"}</h2>
+				<ul class="ipsDataList ipsDataList_reducedSpacing ipsSpacer_top">
+					<li class="ipsDataItem">
+						<span class="ipsDataItem_generic ipsDataItem_size3"><strong>{lang="views"}</strong></span>
+						<span class="ipsDataItem_generic cFileInfoData">{number="$file->views"}</span>
+					</li>
+					{{if $file->isPaid() and !$file->nexus and \in_array( 'purchases', explode( ',', settings.idm_nexus_display ) )}}
+						<li class="ipsDataItem" title='{lang="x_downloads" pluralize="$file->downloads"}' data-ipsTooltip>
+							<span class="ipsDataItem_generic ipsDataItem_size3"><strong>{lang="idm_purchases"}</strong></span>
+							<span class="ipsDataItem_generic cFileInfoData">{$file->purchaseCount()}</span>
+						</li>
+					{{endif}}
+					{{if !$file->isPaid() or \in_array( 'downloads', explode( ',', settings.idm_nexus_display ) ) }}
+						<li class="ipsDataItem">
+							<span class="ipsDataItem_generic ipsDataItem_size3"><strong>{lang="downloads_file_info"}</strong></span>
+							<span class="ipsDataItem_generic cFileInfoData">{number="$file->downloads"}</span>
+						</li>
+					{{endif}}
+					<li class="ipsDataItem">
+						<span class="ipsDataItem_generic ipsDataItem_size3"><strong>{lang="submitted"}</strong></span>
+						<span class="ipsDataItem_generic cFileInfoData">{datetime="$file->submitted"}</span>
+					</li>
+					{{if $file->updated != $file->submitted}}
+						<li class="ipsDataItem">
+							<span class="ipsDataItem_generic ipsDataItem_size3"><strong>{lang="updated"}</strong></span>
+							<span class="ipsDataItem_generic cFileInfoData">{datetime="$file->updated"}</span>
+						</li>
+					{{endif}}
+					{{if $file->filesize()}}
+						<li class="ipsDataItem">
+							<span class="ipsDataItem_generic ipsDataItem_size3"><strong>{lang="filesize"}</strong></span>
+							<span class="ipsDataItem_generic cFileInfoData">{filesize="$file->filesize()"}</span>
+						</li>
+					{{endif}}
+					{{foreach $cfields as $k => $v}}
+						<li class="ipsDataItem">
+							<span class="ipsDataItem_generic ipsDataItem_size3"><strong>{lang="downloads_{$k}"}</strong></span>
+							<div class="ipsDataItem_generic ipsType_break cFileInfoData">
+								{$v|raw}
+							</div>
+						</li>
+					{{endforeach}}
+
+					{{if $file->canViewDownloaders() and $file->downloads}}
+						<br>
+						<a href='{$file->url('log')}' title='{lang="view_downloader_list"}' class='' data-ipsDialog data-ipsDialog-size="narrow" data-ipsDialog-title="{lang="downloaders"}">{lang="who_downloaded"}</a>
+					{{endif}}
+				</ul>
+				</div>
+			</aside>
+		</div>
+	</div>
+</div>]]></template>
+ <template template_group="embed" template_name="popup_forums" template_data="$topic" template_location="front" template_app="featuredcontent"><![CDATA[<div class="ipsPad">
+	{{if $topic->isArchived()}}
+		<div class='ipsMessage ipsMessage_info ipsSpacer_bottom'>
+			<h4 class='ipsMessage_title'>{lang="topic_is_archived"}</h4>
+			<p class='ipsType_reset'>
+				{lang="topic_archived_desc"}
+			</p>
+		</div>
+	{{endif}}
+
+	{{if $topic->isQuestion()}}
+		<div class='ipsColumns'>
+			<div class='cRatingColumn cRatingColumn_question ipsColumn ipsColumn_narrow ipsType_center'>
+				<ul class='ipsList_reset'>
+					{{if $topic->canVote()}}
+						<li>
+							<a href='{$topic->url()->setQueryString( array( 'do' => 'rateQuestion', 'rating' => 1 ) )->csrf()}' class='{{if !$topic->canVote(1)}}ipsHide{{endif}} cAnswerRate cAnswerRate_up {{if isset( $topicVotes[ \IPS\Member::loggedIn()->member_id ] ) && $topicVotes[ \IPS\Member::loggedIn()->member_id ] === 1}}ipsType_positive{{endif}}' title='{lang="vote_question_up"}' data-ipsTooltip><i class='fa fa-caret-up'></i></a>
+							<span class='{{if $topic->canVote(1)}}ipsHide{{endif}} cAnswerRate cAnswerRate_up {{if isset( $topicVotes[ \IPS\Member::loggedIn()->member_id ] ) && $topicVotes[ \IPS\Member::loggedIn()->member_id ] === 1}}ipsType_positive{{endif}}'><i class='fa fa-caret-up'></i></span>
+						</li>
+					{{else}}
+						<li>
+							<span class='cAnswerRate cAnswerRate_up cAnswerRate_noPermission' {{if !\IPS\Member::loggedIn()->member_id}}data-ipsTooltip title='{lang="sign_in_rate_question"}'{{endif}}><i class='fa fa-caret-up'></i></span>
+						</li>
+					{{endif}}
+
+						<li><span data-role="voteCount" data-voteCount="{expression="\intval( $topic->question_rating )"}" class='cAnswerRating {{if isset( $topicVotes[ \IPS\Member::loggedIn()->member_id ] ) && $topicVotes[ \IPS\Member::loggedIn()->member_id ] === 1}}ipsType_positive{{elseif isset( $topicVotes[ \IPS\Member::loggedIn()->member_id ] ) && $topicVotes[ \IPS\Member::loggedIn()->member_id ] === -1}}ipsType_negative{{endif}}'>{expression="\intval( $topic->question_rating )"}</span></li>
+
+					{{if $topic->canVote() && \IPS\Settings::i()->forums_questions_downvote}}
+						<li>
+							<a href='{$topic->url()->setQueryString( array( 'do' => 'rateQuestion', 'rating' => -1 ) )->csrf()}' class='{{if !$topic->canVote(-1)}}ipsHide{{endif}} cAnswerRate cAnswerRate_down {{if isset( $topicVotes[ \IPS\Member::loggedIn()->member_id ] ) && $topicVotes[ \IPS\Member::loggedIn()->member_id ] === -1}}ipsType_negative{{endif}}' title='{lang="vote_question_down"}' data-ipsTooltip><i class='fa fa-caret-down'></i></a>
+							<span class='{{if $topic->canVote(-1)}}ipsHide{{endif}} cAnswerRate cAnswerRate_down {{if isset( $topicVotes[ \IPS\Member::loggedIn()->member_id ] ) && $topicVotes[ \IPS\Member::loggedIn()->member_id ] === -1}}ipsType_negative{{endif}}'><i class='fa fa-caret-down'></i></span>
+						</li>
+					{{elseif \IPS\Settings::i()->forums_questions_downvote}}
+						<li>
+							<span class='cAnswerRate cAnswerRate_down cAnswerRate_noPermission' {{if !\IPS\Member::loggedIn()->member_id}}data-ipsTooltip title='{lang="sign_in_rate_question"}'{{endif}}><i class='fa fa-caret-down'></i></span>
+						</li>
+					{{endif}}
+				</ul>
+			</div>
+			<div class='ipsColumn ipsColumn_fluid'>
+	{{endif}}
+	<div class="ipsPageHeader ipsClearfix">
+		<div class='ipsPhotoPanel ipsPhotoPanel_small ipsPhotoPanel_notPhone ipsClearfix'>
+			{template="userPhoto" group="global" app="core" params="$topic->author(), 'small', $topic->warningRef()"}
+			<div>
+				<h1 class='ipsType_pageTitle ipsContained_container'>
+					{{if $topic->mapped('pinned') || $topic->mapped('featured') || $topic->hidden() === -1 || $topic->hidden() === 1 || $topic->hidden() === -2}}
+						{{if $topic->hidden() === -1}}
+							<span><span class="ipsBadge ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{$topic->hiddenBlurb()}'><i class='fa fa-eye-slash'></i></span></span>
+						{{elseif $topic->hidden() === -2}}
+							<span><span class="ipsBadge ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{$topic->deletedBlurb()}'><i class='fa fa-trash'></i></span></span>
+						{{elseif $topic->hidden() === 1}}
+							<span><span class="ipsBadge ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{lang="pending_approval"}'><i class='fa fa-warning'></i></span></span>
+						{{endif}}
+						{{if $topic->mapped('pinned')}}
+							<span><span class="ipsBadge ipsBadge_icon ipsBadge_positive" data-ipsTooltip title='{lang="pinned"}'><i class='fa fa-thumb-tack'></i></span></span>
+						{{endif}}
+						{{if $topic->mapped('featured')}}
+							<span><span class="ipsBadge ipsBadge_icon ipsBadge_positive" data-ipsTooltip title='{lang="featured"}'><i class='fa fa-star'></i></span></span>
+						{{endif}}
+					{{endif}}
+
+					{{if $topic->prefix() OR ( $topic->canEdit() AND $topic::canTag( NULL, $topic->container() ) AND $topic::canPrefix( NULL, $topic->container() ) )}}
+						<span {{if !$topic->prefix()}}class='ipsHide'{{endif}} {{if ( $topic->canEdit() AND $topic::canTag( NULL, $topic->container() ) AND $topic::canPrefix( NULL, $topic->container() ) )}}data-editablePrefix{{endif}}>
+							{template="prefix" group="global" app="core" params="$topic->prefix( TRUE ), $topic->prefix()"}
+						</span>
+					{{endif}}
+					{{if $topic->canEdit()}}
+						<span class='ipsType_break ipsContained' data-controller="core.front.core.moderation">
+							<span data-role="editableTitle" title='{lang="click_hold_edit"}'>{$topic->title}</span>
+						</span>
+					{{else}}
+						<span class='ipsType_break ipsContained'>
+							<span><a href="{$topic->url()}" title="{$topic->title}">{$topic->title}</a></span>
+						</span>
+					{{endif}}
+				</h1>
+				{{if $topic->locked() && $topic->topic_open_time && $topic->topic_open_time > time()}}
+					<p class='ipsType_reset ipsType_medium'><strong><i class='fa fa-clock-o'></i> {lang="topic_unlocks_at" htmlsprintf="\IPS\DateTime::ts( $topic->topic_open_time )->html(), \IPS\DateTime::ts( $topic->topic_open_time )->localeTime( FALSE )"}</strong></p>
+				{{elseif !$topic->locked() && $topic->topic_close_time && $topic->topic_close_time > time()}}
+					<p class='ipsType_reset ipsType_medium'><strong><i class='fa fa-clock-o'></i> {lang="topic_locks_at" htmlsprintf="\IPS\DateTime::ts( $topic->topic_close_time )->html(), \IPS\DateTime::ts( $topic->topic_close_time )->localeTime( FALSE )"}</strong></p>
+				{{endif}}
+				<p class='ipsType_reset ipsType_blendLinks {{if \count( $topic->tags() ) OR ( $topic->canEdit() AND $topic::canTag( NULL, $topic->container() ) )}}ipsSpacer_bottom ipsSpacer_half{{endif}}'>
+					<span class='ipsType_normal'>
+					{{if $topic->isQuestion()}}
+						{lang="ask_byline_no_date" htmlsprintf="$topic->author()->link( $topic->warningRef() )"}
+					{{else}}
+						{lang="byline_itemprop" htmlsprintf="$topic->author()->link()"} <span class='ipsType_light'>{datetime="$topic->start_date"} {lang="in"} <a href="{$topic->container()->url()}">{$topic->container()->_formattedTitle|raw}</a></span>
+					{{endif}}
+					</span>
+					<br>
+				</p>
+				{{if \count( $topic->tags() ) OR ( $topic->canEdit() AND $topic::canTag( NULL, $topic->container() ) )}}
+					{template="tags" group="global" app="core" params="$topic->tags(), FALSE, FALSE, ( $topic->canEdit() AND $topic::canTag( NULL, $topic->container() ) ) ? $topic->url() : NULL"}
+				{{endif}}
+			</div>
+		</div>
+	</div>
+
+	{{if $topic->isQuestion()}}
+		</div>
+	</div>
+	{{endif}}
+
+	{template="contentItemMessages" group="global" app="core" params="$topic->getMessages(), $topic"}
+
+	{{if $topic->hidden() === 1 and $topic->canUnhide()}}
+		<div class="ipsMessage ipsMessage_warning ipsSpacer_top">
+			<p class="ipsType_reset">{lang="topic_pending_approval"}</p>
+			<ul class='ipsList_inline ipsSpacer_top'>
+				<li><a href="{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unhide' ) )}" class="ipsButton ipsButton_positive ipsButton_verySmall" title='{lang="approve_title_topic"}'><i class="fa fa-check"></i> {lang="approve"}</a></li>
+				{{if $topic->canDelete()}}
+					<li><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'delete' ) )}' data-confirm  title='{lang="topic_delete_title"}' class='ipsButton ipsButton_negative ipsButton_verySmall'><i class='fa fa-times'></i> {lang="delete"}</a></li>
+				{{endif}}
+			</ul>
+		</div>
+	{{endif}}
+
+	<div class='ipsClearfix'>
+		{{if $topic->container()->forum_allow_rating}}
+			<div class='ipsPos_left ipsType_light ipsResponsive_hidePhone'>
+				{{if $topic->canRate()}}
+					<p class='ipsType_reset ipsType_small'>
+						{{if $topic->isQuestion()}}{lang="rate_this_question"}{{else}}{lang="rate_this_topic"}{{endif}}
+					</p>
+				{{endif}}
+				{$topic->rating()|raw}
+			</div>
+		{{endif}}
+		
+		<ul class="ipsToolList ipsToolList_horizontal ipsClearfix ipsSpacer_both {{if !$topic->canComment() and !( $topic->canPin() or $topic->canUnpin() or $topic->canFeature() or $topic->canUnfeature() or $topic->canHide() or $topic->canUnhide() or $topic->canMove() or $topic->canLock() or $topic->canUnlock() or $topic->canDelete() or $topic->availableSavedActions() )}}ipsResponsive_hidePhone{{endif}}">
+			{{if ( $topic->canPin() or $topic->canUnpin() or $topic->canFeature() or $topic->canUnfeature() or $topic->canHide() or $topic->canUnhide() or $topic->canMove() or $topic->canLock() or $topic->canUnlock() or $topic->canDelete() or $topic->availableSavedActions() or $topic->canMerge() or $topic->canUnarchive() or $topic->canRemoveArchiveExcludeFlag() or \IPS\Member::loggedIn()->modPermission('can_view_moderation_log') ) or ( $topic->hidden() == -2 AND \IPS\Member::loggedIn()->modPermission('can_manage_deleted_content') )}}
+				<li>
+					<a href='#elTopicActions_menu' id='elTopicActions' class='ipsButton ipsButton_link ipsButton_medium ipsButton_fullWidth' data-ipsMenu>{lang="moderator_actions"} <i class='fa fa-caret-down'></i></a>
+					<ul id='elTopicActions_menu' class='ipsMenu ipsMenu_auto ipsHide'>
+						{{if \IPS\Member::loggedIn()->modPermission('can_manage_deleted_content') AND $topic->hidden() == -2}}
+							<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'restore' ) )}' data-confirm data-confirmSubMessage='{lang="restore_as_visible_desc"}'>{lang="restore_as_visible"}</a></li>
+							<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'restoreAsHidden' ) )}' data-confirm data-confirmSubMessage='{lang="restore_as_hidden_desc"}'>{lang="restore_as_hidden"}</a></li>
+							<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'delete', 'immediate' => 1 ) )}' data-confirm data-confirmSubMessage='{lang="delete_immediately_desc"}'>{lang="delete_immediately"}</a></li>
+						{{else}}
+							{{if $topic->canFeature()}}				
+								<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'feature' ) )}'>{lang="feature"}</a></li>
+							{{endif}}
+							{{if $topic->canUnfeature()}}				
+								<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unfeature' ) )}' >{lang="unfeature"}</a></li>
+							{{endif}}
+							{{if $topic->canPin()}}				
+								<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'pin' ) )}' >{lang="pin"}</a></li>
+							{{endif}}
+							{{if $topic->canUnpin()}}				
+								<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unpin' ) )}' >{lang="unpin"}</a></li>
+							{{endif}}
+							{{if $topic->canHide()}}				
+								<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'hide' ) )}' data-ipsDialog data-ipsDialog-title="{lang="hide"}">{lang="hide"}</a></li>
+							{{endif}}
+							{{if $topic->canUnhide()}}				
+								<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unhide' ) )}' >{{if $topic->hidden() === 1}}{lang="approve"}{{else}}{lang="unhide"}{{endif}}</a></li>
+							{{endif}}
+							{{if $topic->canLock()}}				
+								<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'lock' ) )}' >{lang="lock"}</a></li>
+							{{endif}}
+							{{if $topic->canUnlock()}}				
+								<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unlock' ) )}' >{lang="unlock"}</a></li>
+							{{endif}}
+							{{if $topic->canMove()}}				
+								<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'move' ) )}' data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-title="{lang="move"}"  >{lang="move"}</a></li>
+							{{endif}}
+							{{if $topic->canMerge()}}				
+								<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'merge' ) )}' data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-title="{lang="merge"}" >{lang="merge"}</a></li>
+							{{endif}}
+							{{if $topic->canUnarchive()}}
+								<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'unarchive' ) )}' data-confirm data-confirmSubMessage="{$topic->unarchiveBlurb()}" >{lang="unarchive"}</a></li>
+							{{endif}}
+							{{if $topic->canRemoveArchiveExcludeFlag()}}
+								<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'removeArchiveExclude' ) )}' >{lang="remove_archive_exlude"}</a></li>
+							{{endif}}
+							{{if $topic->canDelete()}}				
+								<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'delete' ) )}' data-confirm  >{lang="delete"}</a></li>
+							{{endif}}
+							{{if $topic->canOnMessage( 'add' )}}
+								<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'messageForm' ) )}' data-ipsDialog data-ipsDialog-title='{lang="add_message"}'>{lang="add_message"}</a></li>
+							{{endif}}
+							{{if !$topic->isArchived() and $topic->availableSavedActions()}}
+								<li class='ipsMenu_sep'><hr></li>
+								{{foreach $topic->availableSavedActions() as $action}}
+									<li class="ipsMenu_item"><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'savedAction', 'action' => $action->_id ) )}' data-confirm>{$action->_title}</a></li>
+								{{endforeach}}
+							{{endif}}
+							{{if \IPS\Member::loggedIn()->modPermission('can_view_moderation_log')}}	
+								<li class='ipsMenu_sep'><hr></li>
+								<li class="ipsMenu_item"><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'modLog' ) )}' data-ipsDialog data-ipsDialog-title='{lang="moderation_history"}'>{lang="moderation_history"}</a></li>
+							{{endif}}
+						{{endif}}
+					</ul>
+				</li>
+			{{endif}}
+		</ul>
+	</div>
+	{{if $poll = $topic->getPoll()}}
+		{$poll|raw}
+		<br>
+	{{endif}}
+	<div data-controller='core.front.core.commentFeed,forums.front.topic.view, core.front.core.ignoredComments' {{if settings.auto_polling_enabled}}data-autoPoll{{endif}} data-baseURL='{$topic->url()}' {{if $topic->isLastPage()}}data-lastPage{{endif}} data-feedID='topic-{$topic->tid}' class='cTopic ipsClear ipsSpacer_top'>
+		{$topic->comments( 1 )->content()|raw}
+	</div>
+
+</div>]]></template>
+ <template template_group="embed" template_name="popup_videobox" template_data="$tab, $output, $video" template_location="front" template_app="featuredcontent"><![CDATA[<div class='ipsPad fcVbWrapper'>
+	<div class="ipsPageHeader ipsClearfix ipsSpacer_bottom">
+		<div class='ipsPos_left'>
+			<div class='ipsSpacer_bottom'>
+				<h1 itemprop="name" class='ipsType_pageTitle'>
+					{{if $video->prefix()}}
+						{template="prefix" group="global" app="core" params="$video->prefix( TRUE ), $video->prefix()"}
+					{{endif}}	
+					<a href="{$video->url()}" title="{$video->title}">{wordbreak="$video->title"}</a>
+					{{if $video->mapped('pinned') || $video->mapped('featured') || $video->hidden() === -1 || $video->hidden() === 1 || $video->locked() === 1}}
+						{{if $video->hidden() === -1}}
+							<span class="ipsBadge ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{$video->hiddenBlurb()}'><i class='fa fa-eye-slash'></i></span>
+						{{elseif $video->hidden() === 1}}
+							<span class="ipsBadge ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{lang="pending_approval"}'><i class='fa fa-warning'></i></span>
+						{{endif}}
+						{{if $video->mapped('pinned')}}
+							<span class="ipsBadge ipsBadge_icon ipsBadge_positive" data-ipsTooltip title='{lang="pinned"}'><i class='fa fa-thumb-tack'></i></span>
+						{{endif}}
+						{{if $video->mapped('featured')}}
+							<span class="ipsBadge ipsBadge_icon ipsBadge_positive" data-ipsTooltip title='{lang="featured"}'><i class='fa fa-star'></i></span>
+						{{endif}}
+						{{if $video->locked() === 1}}
+							<strong class='ipsType_warning' data-ipsTooltip title='{lang="locked"}'><i class='fa fa-lock'></i></strong>
+						{{endif}}						
+					{{endif}}		
+				</h1>
+				{{if $video->container()->bitoptions['hideinfo'] == 1}}
+					<br>
+					<span class='ipsType_small ipsType_small ipsType_light'>
+						{lang="videobox_started" htmlsprintf="$video->author()->link( $video->warningRef() )"} - {datetime="$video->started"}&nbsp;|&nbsp;
+						{lang="videobox_views"}: {number="$video->views"}&nbsp;|&nbsp;{lang="videobox_comment"}: {number="$video->comments"}&nbsp;&nbsp;&nbsp;
+					</span>			
+					{{if $video->container()->bitoptions['reviews']}}
+						{template="rating" group="global" location="front" app="core" params="'large', $video->averageReviewRating(), \IPS\Settings::i()->reviews_rating_out_of"}&nbsp;&nbsp; <span class='ipsType_normal ipsType_light'>({lang="num_reviews" pluralize="$video->reviews"})</span>
+					{{else}}
+						{{if $video->container()->bitoptions['rating']}}
+							<div>{$video->rating()|raw}</div>
+						{{endif}}	
+					{{endif}}				
+				{{endif}}
+			</div>
+		</div>
+	</div>
+
+	{template="contentItemMessages" group="global" app="core" params="$video->getMessages(), $video"}
+
+	{{if $video->canPlay() && $video->container()->videoTab == 1}}
+		<div class='ipsTabs ipsTabs_withIcons ipsTabs_contained ipsTabs_stretch ipsClearfix' id='elVideoTabs'>
+			<a href='#elVideoTabs' data-action='expandTabs'><i class='fa fa-caret-down'></i></a>
+			<ul role='tablist' class='ipsList_reset'>
+				<li role='presentation'>
+					<a href="{$video->url()->setQueryString( 'area', 'info' )}" id='video_info' role='tab' class='videoTabs ipsTabs_item {{if $tab != 'online'}}ipsTabs_activeItem{{endif}}' title='{lang="videobox_basicInfo"}'>
+						<i class='fa fa-tachometer'></i> {lang="videobox_basicInfo"}
+					</a>
+				</li>
+				<li role='presentation'>
+					<a href="{$video->url()->setQueryString( 'area', 'online' )}" id='video_online' role='tab' class='videoTabs ipsTabs_item {{if $tab == 'online'}}ipsTabs_activeItem{{endif}}' title='{lang="videobox_watchonline"}'>
+						<i class='fa fa-film'></i> {lang="videobox_watchonline"}
+					</a>
+				</li>
+			</ul>
+		</div>
+	{{endif}}
+
+	<div id='VideoContent' class='{{if $video->canPlay() && $video->container()->videoTab == 1}}ipsTabs_contained ipsTabs_panels{{endif}} ipsPad ipsBox'>
+		{$output|raw}
+	</div>
+
+	{{if \count( $video->tags() ) OR ( $video->canEdit() AND $video::canTag( NULL, $video->container() ) )}}
+		<br>
+		{template="tags" group="global" app="core" params="$video->tags(), FALSE, FALSE, ( $video->canEdit() AND $video::canTag( NULL, $video->container() ) ) ? $video->url() : NULL"}
+	{{endif}}
+</div>]]></template>
+ <template template_group="embed" template_name="showGrid" template_data="$slider, $data, $conf=array()" template_location="front" template_app="featuredcontent"><![CDATA[{{$radio = round( ($slider->img_h/$slider->img_w), 2 ) * 100;}}
+{{$titleHeight = $slider->truncate > 0 ? (35 * $slider->truncate) . 'px' : 'auto';}}
+<div id="Fcontent_{$slider->id}" class="{{if $conf['fcontent_use_wrapper']}}ipsBox{{endif}} {{if $slider->hideinmobile == 1}}ipsResponsive_hidePhone{{endif}}">
+	{{if $slider->showname == 1}}
+		{{if $conf['fcontent_use_wrapper']}}
+			<h3 class="ipsWidget_title ipsType_reset">
+				{$slider->title}
+			</h3>		
+		{{else}}
+			<div class="ipsPageHeader ipsClearfix sliderTitle">
+				<h1 class="ipsType_pageTitle">{$slider->title}</h1>
+			</div>
+		{{endif}}
+	{{endif}}
+	<div class="{{if $conf['fcontent_use_wrapper']}}ipsPad{{endif}}">
+		<div id='fcGridWrapper_{$slider->id}' class="fcGridWrapper nolinks norewrite">
+			<div class='ipsGrid' data-ipsGrid data-ipsGrid-minItemSize='200' data-ipsGrid-equalHeights='row'>
+				{{foreach $data as $row}}
+					<div class='ipsGrid_span3 ipsSpacer_half ipsSpacer_bottom ipsBox'>
+						<li class="fcitem" {{if $row['id']>0}}id="fcc_{$row['id']}"{{endif}}>
+							{{if $slider->nolink != 1}}
+								{{if $slider->viewlinkin == '3' && $slider->method != 'noauto' && $slider->method != 'gallery'}}
+									<a href="#" data-ipsDialog data-ipsDialog-forceReload data-ipsDialog-url="{url="app=featuredcontent&module=slider&controller=view&do=popup&id={$slider->id}&item={$row['id']}"}" data-ipsDialog-size='medium' title="{$row['title']}">
+								{{else}}
+									<a href="{$row['url']}" title="{$row['title']}" {{if $slider->viewlinkin == 'page' || $row['newtab'] == 1}}target=_blank{{endif}}>
+								{{endif}}
+							{{endif}}
+							
+									<div class="fc_img_container" style="background-image:url('{$row['image']}'); height: 100%; max-height:{$slider->itemHeight}; width:100%; padding-bottom: {$radio}%;"></div>
+							
+									{{if $slider->showtitle == 1 && $row['title']}}
+										<div class="{{if $slider->title_pos == 'inside'}}bx-caption{{else}}bx-caption2{{endif}}">
+											<span data-ipsTruncate data-ipsTruncate-type="remove" data-ipsTruncate-size="{$slider->truncate} lines">
+												{$row['title']}
+											</span>
+										</div>
+									{{endif}}
+									
+							{{if $slider->nolink != 1}}
+								</a>
+							{{endif}}
+							
+							{{if $slider->showtitle == 1 && $row['title'] && $row['author'] && $slider->title_pos == 'below'}}
+								<div class='fcAuthor ipsType_reset ipsType_medium ipsType_light ipsType_blendLinks'>
+									{lang="byline_nodate" htmlsprintf="$row['author']->link()"} {datetime="$row['date']"}
+								</div>
+							{{endif}}
+							
+							{{if $slider->method == 'noauto' AND ( $slider->can('manage') OR ( $row['moderators'] AND \in_array( member.member_id, explode( ",", $row['moderators'] ) ) ) )}}
+								<div class="modbutton">
+									<a href='#' data-ipsdialog='' data-ipsDialog-url="{url="app=featuredcontent&module=slider&controller=view&do=manageslider&id={$slider->id}&item={$row['id']}"}" data-ipsdialog-size='narrow' data-ipsdialog-title='{lang="fcs_edit"}' data-ipsdialog-forcereload='true'>
+										<i class="fa fa-pencil"></i>
+									</a>
+								</div>
+							{{endif}}
+						</li>
+					</div>
+				{{endforeach}}
+			</div>
+			{{if $slider->method == 'noauto' AND $slider->can('manage')}}
+				<div class="addbutton">
+					<a href="{url="app=featuredcontent&module=slider&controller=view&id={$slider->id}"}" title='{lang="fcontent_manageslider"}'><i class="fa fa-cog"></i></a>
+				</div>
+			{{endif}}
+		</div>
+	</div>
+</div>]]></template>
+ <template template_group="embed" template_name="showSlider" template_data="$slider, $data, $conf=array()" template_location="front" template_app="featuredcontent"><![CDATA[{{$titleHeight = $slider->truncate > 0 ? (35 * $slider->truncate) . 'px' : 'auto';}}
+<div id="Fcontent_{$slider->id}" class="{{if $conf['fcontent_use_wrapper']}}ipsBox{{endif}} {{if $slider->hideinmobile == 1}}ipsResponsive_hidePhone{{endif}}">
+	{{if $slider->showname == 1}}
+		{{if $conf['fcontent_use_wrapper']}}
+			<h3 class="ipsWidget_title ipsType_reset">
+				{$slider->title}
+			</h3>		
+		{{else}}
+			<div class="ipsPageHeader ipsClearfix sliderTitle">
+				<h1 class="ipsType_pageTitle">{$slider->title}</h1>
+			</div>
+		{{endif}}
+	{{endif}}
+	<div class="{{if $conf['fcontent_use_wrapper']}}ipsPad{{endif}}">
+		<div id='sliderWrapper_{$slider->id}' class="sliderWrapper {{if $slider->ticker && $slider->style != 'vertical'}}fcTicker{{endif}} nolinks norewrite">
+			<ul class='slider_{$slider->id}' {{if $slider->style != 'horizontal'}}style='margin-left: -40px;'{{endif}}>
+				{{foreach $data as $row}}
+					<li class="fcitem {{if $slider->title_pos == 'below'}}ipsBox{{endif}}" {{if $row['id']>0}}id="fcc_{$row['id']}"{{endif}} style='{{if $slider->ticker && $slider->margin>0}}margin-right:{$slider->margin}px;{{endif}}{{if $slider->title_pos == 'below'}}padding-bottom: {$slider->titleHeight};{{endif}}'>
+						{{if $slider->nolink != 1}}
+							{{if $slider->viewlinkin == '3' && $slider->method != 'noauto' && $slider->method != 'gallery'}}
+								<a href="#" data-ipsDialog data-ipsDialog-forceReload data-ipsDialog-url="{url="app=featuredcontent&module=slider&controller=view&do=popup&id={$slider->id}&item={$row['id']}"}" data-ipsDialog-size='medium' title="{$row['title']}">
+							{{else}}
+								<a href="{$row['url']}" title="{$row['title']}" {{if $slider->viewlinkin == 'page' || $row['newtab'] == 1}}target=_blank{{endif}}>
+							{{endif}}
+						{{endif}}
+						
+								<div class="fc_img_container" style="background-image:url('{$row['image']}'); {{if $slider->ticker}}height: {$slider->itemHeight}; width:{$slider->itemWidth};{{else}}height: 100%; max-height:{$slider->itemHeight}; width:100%;{{endif}}padding-bottom: {$slider->titleHeight};"></div>
+						
+								{{if $slider->showtitle == 1 && $row['title']}}
+									<div class="{{if $slider->title_pos == 'inside'}}bx-caption{{else}}bx-caption2{{endif}}">
+										<span data-ipsTruncate data-ipsTruncate-type="remove" data-ipsTruncate-size="{$slider->truncate} lines">
+											{$row['title']}
+										</span>
+									</div>
+								{{endif}}
+								
+						{{if $slider->nolink != 1}}
+							</a>
+						{{endif}}
+						
+						{{if $slider->showtitle == 1 && $row['title'] && $slider->title_pos == 'below'}}
+							<div class='fcAuthor ipsType_reset ipsType_medium ipsType_light ipsType_blendLinks'>
+								{lang="byline_nodate" htmlsprintf="$row['author']->link()"} {datetime="$row['date']"}
+							</div>
+						{{endif}}
+						
+						{{if $slider->method == 'noauto' AND ( $slider->can('manage') OR ( $row['moderators'] AND \in_array( member.member_id, explode( ",", $row['moderators'] ) ) ) )}}
+							<div class="modbutton">
+								<a href='#' data-ipsdialog='' data-ipsDialog-url="{url="app=featuredcontent&module=slider&controller=view&do=manageslider&id={$slider->id}&item={$row['id']}"}" data-ipsdialog-size='narrow' data-ipsdialog-title='{lang="fcs_edit"}' data-ipsdialog-forcereload='true'>
+									<i class="fa fa-pencil"></i>
+								</a>
+							</div>
+						{{endif}}
+					</li>	
+				{{endforeach}}
+			</ul>
+			{{if $slider->method == 'noauto' AND $slider->can('manage')}}
+				<div class="addbutton">
+					<a href="{url="app=featuredcontent&module=slider&controller=view&id={$slider->id}"}" title='{lang="fcontent_manageslider"}'><i class="fa fa-cog"></i></a>
+				</div>
+			{{endif}}
+		</div>
+	</div>
+</div>
+{{\IPS\Output::i()->endBodyCode .= \IPS\Theme::i()->getTemplate( 'embed', 'featuredcontent', 'front' )->config( $slider );}}]]></template>
+ <template template_group="manage" template_name="button" template_data="$from,$contentID" template_location="front" template_app="featuredcontent"><![CDATA[{{if \IPS\featuredcontent\Slider::canOnAny('manage')}}
+	{{$sliders = \IPS\featuredcontent\Slider::roots();}}
+	{{if !empty( $sliders )}}
+		<li>
+			<a href='#elFcontent_menu' id='elFcontent' class='ipsButton ipsButton_link ipsButton_medium ipsButton_fullWidth' data-ipsMenu>{lang="fcontent_addfrom"} <i class='fa fa-caret-down'></i></a>
+			<ul id='elFcontent_menu' class='ipsMenu ipsMenu_auto ipsHide'>
+				{{foreach $sliders as $slider}}
+					{{if \IPS\featuredcontent\Slider::can('manage') AND $slider->enabled == 1 AND $slider->method == 'noauto'}}
+						<li class='ipsMenu_item'>
+							<a href='#' data-ipsdialog='' data-ipsDialog-url="{url="app=featuredcontent&module=slider&controller=view&do=add&id={$slider->id}&from={$from}&contentID={$contentID}"}" data-ipsdialog-size='narrow' data-ipsdialog-title='{lang="fcs_edit"}' data-ipsdialog-forcereload='true'>
+								{$slider->title}
+							</a>
+						</li>
+					{{endif}}
+				{{endforeach}}
+			</ul>
+		</li>
+	{{endif}}
+{{endif}}]]></template>
+ <template template_group="manage" template_name="itemRows" template_data="$slider" template_location="front" template_app="featuredcontent"><![CDATA[{{if \count($slider->getContents()) > 0}}
+	{{foreach $slider->getContents() as $row}}
+		<li id="item_{$row['id']}" class='ipsGrid_span2'>
+			<div class='ipsBox ipsPad_half'>
+				<div class="fc_itemWrap">
+					<a href='#' data-ipsdialog='' data-ipsDialog-url="{url="app=featuredcontent&module=slider&controller=view&do=manageSlider&id={$slider->id}&item={$row['id']}"}" data-ipsdialog-size='narrow' data-ipsdialog-title='{lang="fcs_edit"}' data-ipsdialog-forcereload='true'>
+						<img src="{$row['image']}" alt='' style="width: 100%; height: 150px; cursor: move;">
+						{{if $row['title']}}<span>{$row['title']}</span>{{endif}}
+					</a>
+					<div class='fc_mana'>
+						<p data-action="remove" data-itemID="{$row['id']}" data-ipsTooltip title='{lang="fcc_remove"}'>
+							<a href="#"><i class="fa fa-times"></i></a>
+						</p>	
+					</div>						
+				</div>
+			</div>
+		</li>
+	{{endforeach}}	
+{{else}}
+	<div class='ipsBox ipsPad_half'>
+		<div class="fc_itemWrap" align="center">
+			{lang="fcontent_noitem"}
+		</div>
+	</div>		
+{{endif}}]]></template>
+ <template template_group="manage" template_name="list_items" template_data="$slider" template_location="front" template_app="featuredcontent"><![CDATA[<ul class="ipsToolList ipsToolList_horizontal ipsResponsive_block ipsClearfix ipsSpacer_bottom">
+	<li class='ipsToolList_primaryAction'>
+		<a href='#' class='ipsButton ipsButton_medium ipsButton_important' data-ipsdialog='' data-ipsDialog-url="{url="app=featuredcontent&module=slider&controller=view&do=manageSlider&id={$slider->id}"}" data-ipsdialog-size='narrow' data-ipsdialog-title='{lang="fcs_add"}' data-ipsdialog-forcereload='true'>
+			<i class="fa fa-plus"></i> {lang="fcontent_addnew"}
+		</a>
+	</li>
+</ul>
+
+<h3 class='ipsType_reset ipsType_sectionTitle'>{lang="fcontent_manageSlider"} <span class="ipsType_small ipsType_light">({lang="fcontent_manageSlider_info"})</span></h3>
+<div class='ipsAreaBackground ipsPad_half'>
+	<form accept-charset='utf-8' action="{url="app=featuredcontent&module=slider&controller=view&do=move&id={$slider->id}"}" method="post" data-controller="featuredcontent.front.slider.main" id="slidersManagement" data-sliderID="{$slider->id}">
+		<ul class='ipsGrid ipsGrid_collapsePhone' data-role="sliderList" id="all_Items">
+			{template="itemRows" group="manage" app="featuredcontent" params="$slider"}
+		</ul>
+	</form>
+</div>]]></template>
+ <template template_group="widgets" template_name="fcontentWidget" template_data="$slider, $conf" template_location="front" template_app="featuredcontent"><![CDATA[			
+{{if ( $slider->enabled != 1 || \count( $slider->getContents() ) == 0 )}}
+	{template="noContent" app="featuredcontent" group="embed" location="front" params="$slider"}
+{{else}}
+	<ul class='ipsList_reset'>
+		{{if $slider->style == 'grid'}}
+			{template="showGrid" app="featuredcontent" group="embed" location="front" params="$slider, $slider->getContents(), $conf"}
+		{{else}}
+			{template="showSlider" app="featuredcontent" group="embed" location="front" params="$slider, $slider->getContents(), $conf"}
+		{{endif}}
+	</ul>
+{{endif}}]]></template>
+ <css css_location="front" css_app="featuredcontent" css_attributes="" css_path="." css_name="slider.css">/** RESET AND LAYOUT
+===================================*/
+.sliderWrapper {
+	position: relative; 
+	opacity: 0; 
+	height: 0px;
+}
+.sliderContainer {
+	position: relative; padding: 0; margin: 0;
+}
+.sliderTitle {
+	padding-bottom: 5px;
+}
+
+
+.fcGridWrapper,
+.fcGridWrapper .fcitem {
+	position: relative;
+}
+
+.fcWrapper {
+	position: relative;
+	margin: 0 auto 15px;
+	padding: 0;
+	*zoom: 1;
+	/* direction:ltr; */
+}
+
+.fcWrapper img {
+	max-width: 100%;
+	max-height: 100%;
+	display: block;
+	margin: 0 auto;
+}
+
+.editbutton {
+  position: absolute;
+  top: 3px; left: 3px;
+  color: #fff;
+  background: #000;
+  padding: 3px 4px 3px 4px;
+  border-radius: 3px;
+  opacity: 0.3;
+}
+.editbutton a {
+  color: #fff; text-decoration:none;
+}
+.editbutton:hover{
+  opacity: 1;
+}
+
+.addbutton {
+  position: absolute;
+  top: 3px; right: 3px;
+  color: #fff;
+  background: #000;
+  padding: 3px 4px 3px 4px;
+  border-radius: 3px;
+  opacity: 0.3;
+}
+.addbutton a {
+  color: #fff; text-decoration:none;
+}
+.addbutton:hover{
+  opacity: 1;
+}
+
+.modbutton {
+  position: absolute;
+  top: 3px; left: 3px;
+  color: #fff;
+  background: #000;
+  padding: 3px 5px 3px 5px;
+  border-radius: 3px;
+  opacity: 0.3;	
+}
+.modbutton a {
+  color: #fff; text-decoration:none;
+}
+.modbutton:hover{
+  opacity: 1;
+}
+/** THEME
+===================================*/
+
+.fcWrapper .bx-viewport {
+	/*-moz-box-shadow: 0 0 5px #ccc;
+	-webkit-box-shadow: 0 0 5px #ccc;
+	box-shadow: 0 0 5px #ccc;
+	border: 2px solid #fff;*/
+	left: 0px;
+	
+	/*fix other elements on the page moving (on Chrome)*/
+	-webkit-transform: translatez(0);
+	-moz-transform: translatez(0);
+    	-ms-transform: translatez(0);
+    	-o-transform: translatez(0);
+    	transform: translatez(0);
+}
+
+.fcWrapper .bx-pager,
+.fcWrapper .bx-controls-auto {
+	position: absolute;
+	bottom: -30px;
+	width: 100%;
+}
+
+@media screen and (max-width: 767px) {
+	.fcWrapper .bx-pager,
+	.fcWrapper .bx-controls-auto {
+		display: none;
+	}	
+}
+
+/* LOADER */
+.fcWrapper .bx-loading {
+	min-height: 50px;
+	background: url({resource=&quot;bx_loader.gif&quot; app=&quot;featuredcontent&quot; location=&quot;front&quot;}) center center no-repeat #fff;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 2000;
+}
+
+/* PAGER */
+
+.fcWrapper .bx-pager {
+	text-align: center;
+	font-size: .85em;
+	font-family: Arial;
+	font-weight: bold;
+	color: #666;
+	padding-top: 20px;
+}
+
+.fcWrapper .bx-pager .bx-pager-item,
+.fcWrapper .bx-controls-auto .bx-controls-auto-item {
+	display: inline-block;
+	*zoom: 1;
+	*display: inline;
+}
+
+.fcWrapper .bx-pager.bx-default-pager a {
+	background: #666;
+	text-indent: -9999px;
+	display: block;
+	width: 10px;
+	height: 10px;
+	margin: 0 5px;
+	outline: 0;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.fcWrapper .bx-pager.bx-default-pager a:hover,
+.fcWrapper .bx-pager.bx-default-pager a.active {
+	background: #000;
+}
+
+/* DIRECTION CONTROLS (NEXT / PREV) */
+.fcWrapper .bx-prev {
+	left: 10px;
+	background: url({resource=&quot;controls.png&quot; app=&quot;featuredcontent&quot; location=&quot;front&quot;}) no-repeat 0 -32px;
+}
+
+.fcWrapper .bx-next {
+	right: 10px;
+	background: url({resource=&quot;controls.png&quot; app=&quot;featuredcontent&quot; location=&quot;front&quot;}) no-repeat -43px -32px;
+}
+
+.fcWrapper .bx-prev:hover {
+	background-position: 0 0;
+}
+
+.fcWrapper .bx-next:hover {
+	background-position: -43px 0;
+}
+
+.fcWrapper .bx-controls-direction a {
+	position: absolute;
+	top: 50%;
+	margin-top: -16px;
+	outline: 0;
+	width: 32px;
+	height: 32px;
+	text-indent: -9999px;
+	z-index: 99 !important;
+}
+
+.fcWrapper .bx-controls-direction a.disabled {
+	display: none;
+}
+
+/* AUTO CONTROLS (START / STOP) */
+
+.fcWrapper .bx-controls-auto {
+	text-align: center;
+}
+
+.fcWrapper .bx-controls-auto .bx-start {
+	display: block;
+	text-indent: -9999px;
+	width: 10px;
+	height: 11px;
+	outline: 0;
+	background: url({resource=&quot;controls.png&quot; app=&quot;featuredcontent&quot; location=&quot;front&quot;}) -86px -11px no-repeat;
+	margin: 0 3px;
+}
+
+.fcWrapper .bx-controls-auto .bx-start:hover,
+.fcWrapper .bx-controls-auto .bx-start.active {
+	background-position: -86px 0;
+}
+
+.fcWrapper .bx-controls-auto .bx-stop {
+	display: block;
+	text-indent: -9999px;
+	width: 9px;
+	height: 11px;
+	outline: 0;
+	background: url({resource=&quot;controls.png&quot; app=&quot;featuredcontent&quot; location=&quot;front&quot;}) -86px -44px no-repeat;
+	margin: 0 3px;
+}
+
+.fcWrapper .bx-controls-auto .bx-stop:hover,
+.fcWrapper .bx-controls-auto .bx-stop.active {
+	background-position: -86px -33px;
+}
+
+/* PAGER WITH AUTO-CONTROLS HYBRID LAYOUT */
+
+.fcWrapper .bx-controls.bx-has-controls-auto.bx-has-pager .bx-pager {
+	text-align: left;
+	width: 80%;
+}
+
+.fcWrapper .bx-controls.bx-has-controls-auto.bx-has-pager .bx-controls-auto {
+	right: 0;
+	width: 35px;
+}
+
+/* IMAGE CAPTIONS */
+.fcGridWrapper .bx-caption,
+.fcWrapper .bx-caption {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	background: #666\9;
+	background: rgba(0,0,0,0.5);
+	width: 100%;
+}
+
+.fcGridWrapper .bx-caption span,
+.fcWrapper .bx-caption span {
+	color: #fff;
+	display: block;
+	font-size: 13px;
+	line-height: 18px;
+	padding: 8px 8px 9px 8px;
+}
+
+/* CUSTOMIZATION INTERFACE */
+.fc_itemWrap {
+	position: relative;
+}
+
+.fc_itemWrap span {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	background: #666\9;
+	background: rgba(80, 80, 80, 0.75);
+	width: 100%;
+	color: #fff;
+	font-size: .85em;
+	padding: 6px 6px 7px 6px;
+}
+
+.fc_mana { 
+	position: absolute;
+	background: #5E5E5E;
+	border-radius: 3px;
+	z-index: 1;
+	top: 0;
+	right: 0;
+	color: #fff;		
+}	
+.fc_mana a { color: #fff; }
+
+	.fc_mana p {
+		display: block;
+		padding: 3px 6px 3px 6px;
+		background: #000;
+		margin: 1px;
+	}
+	.fc_mana p:hover {
+		background: #404040;
+	}
+	
+.fcTicker {
+  overflow: hidden;
+  float: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+
+.fcTicker li {
+	float: left;
+	list-style: none;
+	position: relative;
+}
+
+.fcTicker li .bx-caption {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	background: #666\9;
+	background: rgba(0,0,0,0.5);
+	width: 100%;
+}
+
+.fcTicker li .bx-caption span {
+	color: #fff;
+	font-family: Arial;
+	display: block;
+	font-size: .85em;
+	padding: 8px 8px 9px 8px;
+}
+
+.fcTicker li .bx-caption2 {
+	position: absolute;
+	bottom: 30px;
+	left: 0;
+	width: 100%;
+}
+
+.fcTicker li .bx-caption2 span {
+	color: inherit;
+	display: block;
+	font-size: 13px;
+	padding: 8px 8px 0px 8px !important;
+}
+
+.fcTicker li .fcAuthor {
+	position: absolute;
+	bottom: 10px;
+	left: 0;
+	width: 100%;
+	padding: 3px 8px 0px 8px !important;
+}
+
+
+/* Fix border and padding in widget (IPS 4.2) */
+.ipsWidget.ipsWidget_horizontal.ipsBox[data-blockid^=&quot;app_featuredcontent&quot;] {
+	border: 0px solid #e0e0e0 !important;
+	box-shadow: 0px 0px 0px rgba(0,0,0,0) !important;
+	background: transparent !important;
+	padding-bottom: 10px !important;
+}
+.ipsWidget.ipsWidget_vertical.ipsBox[data-blockid^=&quot;app_featuredcontent&quot;] {
+	border: 0px !important;
+	box-shadow: 0px 0px 0px rgba(0,0,0,0) !important;
+	background: transparent !important;
+}
+
+.fcVbWrapper ul .videoWrapper {
+	padding-top: 0px !important;
+	margin-bottom: 15px !important;
+}
+
+/* Other */
+.fc_img_container {
+    background-size: cover;
+    background-position: center center;
+	width: 100%;	
+}
+
+.fcGridWrapper .bx-caption2,
+.fcWrapper .bx-caption2 {
+	background: #fff;
+	width: 100%;
+}
+
+.fcGridWrapper .bx-caption2 span,
+.fcWrapper .bx-caption2 span {
+	color: inherit;
+	display: block;
+	font-size: 13px;
+	padding: 8px 8px 0px 8px !important;
+}
+
+.fcGridWrapper .fcAuthor {
+	display: block;
+	padding: 3px 8px 8px 8px !important;	
+}
+
+.fcWrapper .fcAuthor {
+	display: block;
+	padding: 3px 8px 0px 8px !important;
+}
+
+</css>
+ <resource name="bx_loader.gif" app="featuredcontent" location="front" path="/">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</resource>
+ <resource name="controls.png" app="featuredcontent" location="front" path="/">iVBORw0KGgoAAAANSUhEUgAAAGAAAAA/CAYAAAAfQM0aAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpCRjQ5NEM3RDI5QTkxMUUyOTc1NENCMzI4N0QwNDNCOSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpCRjQ5NEM3RTI5QTkxMUUyOTc1NENCMzI4N0QwNDNCOSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkJGNDk0QzdCMjlBOTExRTI5NzU0Q0IzMjg3RDA0M0I5IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkJGNDk0QzdDMjlBOTExRTI5NzU0Q0IzMjg3RDA0M0I5Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+WeGRxAAAB2hJREFUeNrUXFts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</resource>
+ <resource name="noThumb.png" app="featuredcontent" location="front" path="/">iVBORw0KGgoAAAANSUhEUgAAAJMAAACTCAIAAAAFh7xCAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NDgxRjlGMUI3QUZBMTFFNDhCNzI4QTkxMkYyMUI3ODYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NDgxRjlGMUM3QUZBMTFFNDhCNzI4QTkxMkYyMUI3ODYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo0ODFGOUYxOTdBRkExMUU0OEI3MjhBOTEyRjIxQjc4NiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo0ODFGOUYxQTdBRkExMUU0OEI3MjhBOTEyRjIxQjc4NiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pod8k8AAAA0TSURBVHja7N17zNfjG8BxHUiRJMdQmUQ55zClpiyR00Ikh2gLc0whCdlkjJpymPMMmZTTZmGWkaKR4+jgTOSQQ8mZVF57ru2z777P09O3J89P/K7rj+8+h/u+P/d9va/T/fk829Ng//33XyflXygNUwVJLiXJpSS5JJeS5FKSXJJLSXIpSS4lySW5lCSXkuSSXEqSS0lyKUkuyaUkuZQkl+RSklxKkktJckkuJcmlJLkkl5LkUpJcSpJLcilJLiXJJbmUJJeS5FKSXJJLSXIpSS7JpSS5lCSXkuSSXEqSS0lySS4lyaUkuZQkl+RSklxKkktyKUkupV6lcaXtGjf+/vvvv/3224YNy2GvWLFi/fXX32qrrVZUSep0LSLXoEGDxYsXd+7cuWfPnkuXLg1axa111133s88+e/zxx0Ft1KhR6nQtIocHb+vQocPAgQNrbPDxxx+PGzduvfXW43yVP3v58uUbbbTRJpts8ueffyaJeiH3xx9/bLzxxtttt93KGjRv3nzEiBEiKsa8kEeW/pb6bnFR459++umtt96aM2dOs2bNksTqSoNK/ovZjz/+uNlmmz3yyCO86vfff6f6Mo8UQn/++ee4HolwlTmPNTCFqVOnDho0qF27dkmiXnwODMmMiwiJL730Ev8ru/vrr79+8803+Dn45ZdfhEHtN9xww6ZNm5bVMsXx/PnzJ02axFlLUyP2+hokwEf4daW4K65CHlecGt/TKyyLtGd2EZmji0l6xH+8Qgl/+uqrr6S0TTfdNBZfBEOhj7oppWPHjjxJ9ANy7ty5X375ZatWrTbYYINC+wVCF/UqU7oRoNp+++15OUNZtGgRV2YBy5Yti7vy4uabb27YJk2aMKAvvvjit99+q7AsMkjr1q3NTXenoohZWVEs5L9Jrgh91N2iRQuOUpa66GLPPfc87bTTDjjggKJI+eCDDx599NH77rtvyZIlypDQfmmMLcuCoVwXd9ppp0MPPXSHHXaYNWvWsGHDdAeMluNumzZtrrrqKhq/++67w0crIedBumtphocddpiO06ZNUw/H0v6N5NZoJ27BghXD79OnzwMPPHDwwQfDxjPs/Nxt37798OHD77rrLhddqUQ7PInvgn3RRRctWLDAJuSKK67QN5Krcb777rt77rnHFuWdd955+OGHXa8w3Omu5bx58/C29dx6660nTpz4yiuvxBL+796hWPbChQv32GOPG2+8kV4cX3bZZX379j3uuOP69++votFmv/32GzNmjOSE6CrhMX9uIY69/fbbTz31lCtGO+ecc+wXwzmgxQ9UgZQjahxeS/soCrAca2UktBQtNIDfKRMxQvTluGYYKVOejqmGaOZW6czD0YVxLbUvfVzRRbTXxq0i0cRdv3ppUJzWO7myxxf1IUVccMEFpihgDhgw4Pbbb//kk08gfO2118444wxENevRo8fhhx8u81U+LTrlGU8//TQtX3jhhbrLrxFdo1xiKHEKHmb8Xvbdddddzefzzz+n+hr5xW4kbhnEgfZmLiBLBH55s3QgdwJjWDE5UoNpBAaP+/rrr92V0bfZZhsGJCTEgG65rotS2Uwcm4nT6OuuwX/44QdZYMstt7Q/9rg1eXFR6duvIiGVvj1hWbvttlvXrl2d3nzzzbNnz955553pQhvrV0Eg5+7ee+8tkEoqtThE9cchYc8gNgpr48eP//DDD9mEKBcTCBe0copzcOmll6pcTGnHHXd88MEH9WrZsiUHrb3sREgzEUJaff3112Xl6667jtItZOjQoRR90003devWzYHMKi/SOBL77ruvjE710gEqIgq7sV4klD8jR47kVQY/++yzH3roIRZmDi+++KI2u+yyy0knncSqKIQhXnvttYxABVdWAfwvfM7K1YERH+QMCzOtUJZYoSZ0+uyzz0bOQyLenFVuK23btoVBZqKRW265xS8b5zQxh6jyPfrWW28VsUePHs07xVgUBW0tq2OL2FVcN0nHnTp1sqnt3bv3scce+8wzz9x///00y1bOOussUZp+mYvtkPmL0h06dJgwYYKFiOFXX321TOwW1ZuG0UySKety+eWXA3n99defcMIJnAxgjmiGM2fOlPsvueQSpmwcKgrM9UiuRp8z16gkPT7yRFmXgOrYxov1le0NVvluTEBjDddcc83zzz/PmSgisksxARGYarg1TTkWY2lH41NOOUUNWT0+l1aSfkVIriDCx8aGicCA+quvvrrXXnuxxREjRvDCO+64g9FAws/UvRoDbF2sZM6cOSYGqpDbvXt3BqS8km7D1LSE6uKLL2ZhhvVou2HNNDY4g1ANcLv6jZYryxmhHYFR2BHWo3wvdMQY+Y1T8xPitV+t8sdQVMA47A1EnoMOOoi1nnvuua67a3B3JVcsTUPYYRyuqIyi9OfuZRV/ab0Q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</resource>
+</theme>

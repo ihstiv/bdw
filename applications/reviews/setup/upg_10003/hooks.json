@@ -1,0 +1,12 @@
+{
+    "added": [
+        "ReviewsSearch",
+        "ReviewsOutput",
+        "ReviewsGallerySettings",
+        "ReviewsSearchIndex",
+        "ReviewsStreamController",
+        "ReviewsProfile"
+    ],
+    "edited": [],
+    "removed": []
+}

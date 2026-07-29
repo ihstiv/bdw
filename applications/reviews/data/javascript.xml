@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<javascript app="reviews">
+ <file javascript_type="controller" javascript_version="10003" javascript_app="reviews" javascript_path="controllers/products" javascript_location="admin" javascript_position="1000050" javascript_name="ips.products.products.js">
+ /*
++--------------------------------------------------------------------------
+|   Reviews
+|   =============================================
+|   by Esther Eisner
+|   6/21/2017 2:09 PM
+|   Copyright 2017 HeadStand Consulting
+|   esther@headstandconsulting.com
++--------------------------------------------------------------------------
+*/
+
+;( function ($, _, undefined) {
+
+    &quot;use strict&quot;;
+    
+    ips.controller.register( 'reviews.admin.products.products',
+    {
+        initialize: function () {
+            this.on( 'click', '[data-action=&quot;toggleProduct&quot;]', this.toggleEnabled );
+        },
+
+        toggleEnabled: function( e ) {
+            var element = e.target;
+            e.preventDefault();
+
+            ips.getAjax()( $( element ).attr( 'href' ),
+                {
+                    type: 'post',
+                    dataType: 'json'
+                })
+                .done( function( response ){
+                    if( response.enabled == 1 )
+                    {
+                        $( element ).addClass( 'ipsBadge_positive' )
+                            .removeClass( 'ipsBadge_negative' )
+                            .text( 'Enabled' );
+                    }
+                    else
+                    {
+                        $( element ).addClass( 'ipsBadge_negative' )
+                            .removeClass( 'ipsBadge_positive' )
+                            .text( 'Disabled' );
+                    }
+                });
+        }
+    });
+}(jQuery, _));</file>
+</javascript>

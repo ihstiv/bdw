@@ -1,0 +1,41 @@
+/****************************************************************************/
+/* Custom Breadcrumbs By Tom Christian                                      */
+/* Theme: theme_my_custom_theme.css                                         */ 
+/****************************************************************************/
+
+/* Theme Specific */
+
+/* Add your custom theme styles here */
+
+/* Core Styles */
+#secondary_navigation .nav_sep { /* Removes the default > seperator between each breadcrumb */
+    /*display: none;*/
+}
+
+#secondary_navigation { /* Main breadcrumb container */
+    color: #444;
+    line-height: 37px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    height: 37px;
+    position: relative;
+}
+
+#secondary_navigation a { color: #444; height: 30px; outline: 0 none; } /* Link style */
+#secondary_navigation a:hover { color: #2b3238; } /* Link hover style */
+
+#secondary_navigation .breadcrumb.top { font-size: 13px !important; margin-bottom: 0 !important; }
+#secondary_navigation .breadcrumb.top li { float: left; margin-right: 0; }
+
+#secondary_navigation .breadcrumb li a {
+    text-decoration: none;
+}
+
+#secondary_navigation .breadcrumb li span {
+    color: #555;
+    padding: 0 2px 0 2px;
+    margin: 0;
+}
+
+#secondary_navigation .breadcrumb li > span { color: #888; }
+#secondary_navigation .breadcrumb li:first-child a span { padding-left: 13px; }

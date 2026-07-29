@@ -1,0 +1,10 @@
+{
+  "tapatalk": {
+    "settings": {
+      "tab": "community",
+      "controller": "settings",
+      "do": "",
+      "restriction": "settings_manage"
+    }
+  }
+}

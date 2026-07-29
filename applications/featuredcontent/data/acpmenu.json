@@ -1,0 +1,16 @@
+{
+    "sliders": {
+        "settings": {
+            "tab": "customization",
+            "controller": "settings",
+            "do": "",
+            "restriction": "settings_manage"
+        },
+        "sliders": {
+            "tab": "customization",
+            "controller": "sliders",
+            "do": "",
+            "restriction": "sliders_manage"
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+  "admin": {
+    "tapatalk": {
+      "default_controller": "",
+      "protected": false
+    }
+  },
+  "front": {
+    "tapatalk": {
+      "default_controller": "mobiquo",
+      "protected": 0
+    }
+  }
+}

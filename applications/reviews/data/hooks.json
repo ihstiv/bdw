@@ -1,0 +1,26 @@
+{
+    "ReviewsSearchIndex": {
+        "type": "C",
+        "class": "\\IPS\\Content\\Search\\Mysql\\Index"
+    },
+    "ReviewsSearch": {
+        "type": "C",
+        "class": "\\IPS\\core\\modules\\front\\search\\search"
+    },
+    "ReviewsStreamController": {
+        "type": "C",
+        "class": "\\IPS\\core\\modules\\front\\discover\\streams"
+    },
+    "ReviewsOutput": {
+        "type": "C",
+        "class": "\\IPS\\Output"
+    },
+    "ReviewsProfile": {
+        "type": "C",
+        "class": "\\IPS\\core\\modules\\front\\members\\profile"
+    },
+    "ReviewsGallerySettings": {
+        "type": "C",
+        "class": "\\IPS\\gallery\\modules\\admin\\gallery\\settings"
+    }
+}

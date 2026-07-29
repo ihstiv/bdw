@@ -1,0 +1,41 @@
+{
+    "html": {
+        "added": [],
+        "edited": [
+            "front\/browse\/category",
+            "front\/browse\/columnLayout",
+            "front\/browse\/listLayout",
+            "front\/category\/productRows",
+            "front\/category\/view",
+            "front\/global\/reviewRows",
+            "front\/product\/detailedRatings",
+            "front\/product\/ratingDistribution",
+            "front\/product\/reviewForm",
+            "front\/product\/reviewRows",
+            "front\/product\/reviewTable",
+            "front\/product\/view",
+            "front\/review\/comments",
+            "front\/review\/productBox",
+            "front\/review\/view",
+            "front\/widgets\/reviewFeed",
+            "front\/global\/reviewRows",
+            "front\/product\/reviewRows",
+            "front\/review\/view",
+            "front\/widgets\/reviewFeed",
+            "front\/product\/view"
+        ],
+        "removed": []
+    },
+    "css": {
+        "added": [],
+        "edited": [
+            "front\/reviews.css"
+        ],
+        "removed": []
+    },
+    "resources": {
+        "added": [],
+        "edited": [],
+        "removed": []
+    }
+}

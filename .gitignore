@@ -1,0 +1,44 @@
+# ============================================================================
+#  Best Destination Wedding — forum repo .gitignore
+#  Repo = the frozen IPS 4.7.16 CODE only. Secrets, user data, and runtime
+#  caches stay on each server and are NEVER committed.
+# ============================================================================
+
+# --- Secrets / per-environment config (each server keeps its own) ---
+/conf_global.php
+/conf_global*.php
+!/conf_global.dist.php
+/constants.php
+/constants-redis.php
+.htpasswd
+*.htpasswd
+
+# --- User-generated content (lives on the server) ---
+/uploads/*
+!/uploads/.htaccess
+
+# --- Runtime cache (server-side only) ---
+/datastore/*
+!/datastore/.htaccess
+!/datastore/index.html
+
+# --- Logs ---
+*.log
+error_log
+ips-php-error.log
+ips-error.log
+
+# --- Local-mirror artifacts (never deploy these) ---
+*.prod-bak
+/.php.ini
+/.user.ini
+/php.ini
+local-xdebuginfo.php
+local-phpinfo.php
+
+# --- Editor / OS noise ---
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~

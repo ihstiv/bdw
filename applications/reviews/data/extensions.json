@@ -1,0 +1,26 @@
+{
+    "core": {
+        "ContentRouter": {
+            "Reviews": "IPS\\reviews\\extensions\\core\\ContentRouter\\Reviews"
+        },
+        "EditorLocations": {
+            "Product": "IPS\\reviews\\extensions\\core\\EditorLocations\\Product",
+            "Reviews": "IPS\\reviews\\extensions\\core\\EditorLocations\\Reviews"
+        },
+        "FileStorage": {
+            "Product": "IPS\\reviews\\extensions\\core\\FileStorage\\Product"
+        },
+        "FrontNavigation": {
+            "ReviewCategory": "IPS\\reviews\\extensions\\core\\FrontNavigation\\ReviewCategory"
+        },
+        "GroupForm": {
+            "Reviews": "IPS\\reviews\\extensions\\core\\GroupForm\\Reviews"
+        },
+        "MemberSync": {
+            "Reviews": "IPS\\reviews\\extensions\\core\\MemberSync\\Reviews"
+        },
+        "Queue": {
+            "RebuildImages": "IPS\\reviews\\extensions\\core\\Queue\\RebuildImages"
+        }
+    }
+}

@@ -1,0 +1,158 @@
+<if test="$this->settings['ipcontentSlider_slideWidth']">
+	/* If we have a setting that reduces the width of the image, remove loading gif */
+	.theme-default .nivoSlider, .theme-dark .nivoSlider, .theme-light .nivoSlider, .theme-bar .nivoSlider {
+		background:none!important;
+	}
+</if>
+
+<if test="$this->settings['ipcontentSlider_themeLayout'] == alternative">
+	.desc-caption {
+		padding: 5px;
+	}
+	<else />
+	.desc-caption {
+		padding: 6px;
+	}
+</if>
+
+div.slider-wrapper {
+	width: {$this->settings['sliderdimensions_wrapperwidth']}!important;
+
+}
+.nivoSlider img {
+	width: {$this->settings['ipcontentSlider_slideWidth']}!important;
+	height: {$this->settings['ipcontentSlider_slideHeight']}!important;
+}
+.nivo-caption h1 {
+	{$this->settings['ipcontentSlider_font']}
+	margin: 10px;
+	text-align:{$this->settings['ipcontentSlider_captiontitlealign']};
+	font-weight:bold;
+}
+.nivo-caption h1 a {
+	{$this->settings['ipcontentSlider_font']}
+	color:#{$this->settings['ipcontentSlider_captiontitle']}!important;
+	font-size:{$this->settings['ipcontentSlider_fontsize']}!important;
+	border:none!important;
+	text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.75);
+}
+.nivo-caption {
+	height:{$this->settings['ipcontentSlider_captionheight']};
+	<if test="$this->settings['ipcontentSlider_themeLayout'] == alternative">
+	padding: 5% 0 0 0!important;
+	</if>
+}
+.nivo-caption, .desc-caption {
+	background: #{$this->settings['ipcontentSlider_captionbg']}!important;
+}
+.desc-caption p {
+	{$this->settings['ipcontentSlider_font']}
+	line-height: {$this->settings['ipcontentSlider_captionDesclineHeight']};
+	text-align:{$this->settings['ipcontentSlider_captionDescAlign']};
+	color: #{$this->settings['ipcontentSlider_captionDesctext']};
+	font-size: {$this->settings['ipcontentSlider_captionDescFontSize']};
+	text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.75);
+}
+.desc-views{
+	background: #{$this->settings['ipcontentSlider_viewsbg']};
+}
+.desc-readmore{
+	background: #{$this->settings['ipcontentSlider_readmorebg']};
+}
+.theme-pro .desc-readmore, .desc-views {
+	background: #{$this->settings['ipcontentSlider_readmorebg']};
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	-moz-box-shadow: inset 0 1px 0 0 #{$this->settings['ipcontentSlider_proBorder']}, 0px 2px 3px rgba(0,0,0,0.2);
+	-webkit-box-shadow: inset 0 1px 0 0 #{$this->settings['ipcontentSlider_proBorder']}, 0px 2px 3px rgba(0, 0, 0, 0.2);
+	box-shadow: inset 0 1px 0 0 #{$this->settings['ipcontentSlider_proBorder']}, 0px 2px 3px rgba(0, 0, 0, 0.2);
+	border-color: #{$this->settings['ipcontentSlider_proBorder']};
+	padding: 10px!important;
+
+}
+.desc-readmore, .desc-views{
+	padding: 4px 8px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	display: inline-block;
+	color: #6C6C6C;
+	font-size: 11px;
+	font-weight: bold;
+	{$this->settings['ipcontentSlider_font']}
+}
+
+.desc-comments {
+	{$this->settings['ipcontentSlider_enablecomments']};
+	{$this->settings['ipcontentSlider_font']}
+}
+.desc-readmore a, .desc-views a, .desc-comments a{
+	{$this->settings['ipcontentSlider_font']}
+	border:none!important;
+}
+
+.desc-readmore a {
+	color: #{$this->settings['ipcontentSlider_readmorecolor']}!important;
+}
+.desc-views a {
+	color: #{$this->settings['ipcontentSlider_viewscolor']}!important;
+}
+
+.star3, .star4, .star1, .star2, .star5
+{ display: block; background: url('{parse ipcmedia="/ipcontentslider/images/stars.png"}') no-repeat; }
+
+.star1 { background-position: -0px -32px; width: 16px; height: 16px; }
+.star2 { background-position: -16px -32px; width: 32px; height: 16px; }
+.star3 { background-position: -0px -0px; width: 47px; height: 16px; }
+.star4 { background-position: -0px -16px; width: 62px; height: 16px; }
+.star5 { background-position: -0px -48px; width: 77px; height: 16px; }
+
+.commentNo {
+	display:block;
+	background:url('{parse ipcmedia="/ipcontentslider/images/comment.png"}') no-repeat;
+	width: 30px;
+	height: 30px;
+	margin-top: 1px;
+	line-height: 1.5;
+	text-align:center;
+}
+
+span.commentNo a {
+	text-align: center;
+	color: #000!important;
+	text-shadow: 0px 1px #FFF;
+}
+
+.theme-pro .commentNo {
+	width: 28px;
+	background:url('{parse ipcmedia="/ipcontentslider/images/commentpro.png"}') no-repeat;
+}
+
+.theme-pro .nivo-directionNav a {
+	background-color:#{$this->settings['ipcontentSlider_proArrows']};
+	-moz-box-shadow: inset 0 1px 0 0 #{$this->settings['ipcontentSlider_proBorder']}, 0px 2px 3px rgba(0,0,0,0.2);
+	-webkit-box-shadow: inset 0 1px 0 0 #{$this->settings['ipcontentSlider_proBorder']}, 0px 2px 3px rgba(0, 0, 0, 0.2);
+	box-shadow: inset 0 1px 0 0 #{$this->settings['ipcontentSlider_proBorder']}, 0px 2px 3px rgba(0, 0, 0, 0.2);
+	border-color: #{$this->settings['ipcontentSlider_proBorder']};
+	top:38%!important;
+}
+.theme-pro:hover .nivo-directionNav a {
+	opacity:0.8;
+}
+
+.button {
+	background: #{$this->settings['ipcontentSlider_readmorebg']};
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	-moz-box-shadow: inset 0 1px 0 0 #{$this->settings['ipcontentSlider_proBorder']}, 0px 2px 3px rgba(0,0,0,0.2);
+	-webkit-box-shadow: inset 0 1px 0 0 #{$this->settings['ipcontentSlider_proBorder']}, 0px 2px 3px rgba(0, 0, 0, 0.2);
+	box-shadow: inset 0 1px 0 0 #{$this->settings['ipcontentSlider_proBorder']}, 0px 2px 3px rgba(0, 0, 0, 0.2);
+	border-color: #{$this->settings['ipcontentSlider_proBorder']};
+	padding: 5px; /* Because we need to add up to 10px */
+}
+
+.theme-pro .desc-comments right {
+	margin: 10px!important;
+}

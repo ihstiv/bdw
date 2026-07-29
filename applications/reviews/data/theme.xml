@@ -1,0 +1,610 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<theme name="Default" author_name="Invision Power Services, Inc" author_url="https://www.invisioncommunity.com">
+ <template template_group="browse" template_name="category" template_data="$category" template_app="reviews" template_location="front"><![CDATA[<h1 class="ipsType_pageTitle">{$category->name}</h1>
+<ul class="ipsSpacer_top ipsDataList cCategoryTree">
+    {{foreach $category->children() as $child}}
+    {{$total = $child->totalReviews();}}
+    <li class="ipsSpacer_top cCategoryLevel0"><a href="{$child->url()}" class="ipsType_bold ipsType_large">{$child->name}{{if $total}} ({$total}){{endif}}</a></li>
+    {{if $child->hasChildren()}}
+     {{foreach $child->children() as $c}}
+      {{$total = $c->totalReviews();}}
+      <li class="cCategoryLevel1"><a href="{$c->url()}" class="ipsType_normal">{$c->name}{{if $total}} ({$total}){{endif}}</a></li>
+     {{endforeach}}
+    {{endif}}
+    {{endforeach}}
+</ul>]]></template>
+ <template template_group="browse" template_name="columnLayout" template_data="$roots" template_app="reviews" template_location="front"><![CDATA[<div class="ipsColumns">
+    {{foreach $roots as $root}}
+    <div class="ipsColumn">
+        <h2 class="ipsType_largeTitle"><a href="{$root->url()}">{$root->name}</a></h2>
+        {{foreach $root->children() as $child}}
+        <div class="ipsSpacer_top ipsSpacer_half">
+            <a href="{$child->url()}" class="ipsType_normal"><i class="fa fa-chevron-right"></i> {$child->name}</a>
+        </div>
+        {{endforeach}}
+    </div>
+    {{endforeach}}
+</div>]]></template>
+ <template template_group="browse" template_name="listLayout" template_data="$roots" template_app="reviews" template_location="front"><![CDATA[<h1 class="ipsType_pageTitle">{lang="reviews"}</h1>
+{{foreach $roots as $root}}
+<div class="ipsType_sectionTitle ipsSpacer_top">{$root->name}</div>
+<ol class="ipsDataList ipsDataList_zebra">
+    {{foreach $root->children() as $child}}
+    <li class="ipsDataItem">
+        <div class="ipsDataItem_main">
+            <h4 class="ipsDataItem_title"><a href="{$child->url()}">{$child->name}</a></h4>
+            {{if $child->hasChildren()}}
+            <ul class="ipsDataItem_subList ipsList_inline">
+                {{foreach $child->children() as $c}}
+                <li><a href="{$c->url()}">{$c->name}</a></li>
+                {{endforeach}}
+            </ul>
+            {{endif}}
+        </div>
+    </li>
+    {{endforeach}}
+</ol>
+{{endforeach}}]]></template>
+ <template template_group="category" template_name="productRows" template_data="$table, $headers, $rows" template_app="reviews" template_location="front"><![CDATA[{{foreach $rows as $row}}
+<li class="ipsDataItem">
+    <div class="ipsDataItem_generic ipsDataItem_size5 ipsPos_top">
+        <a href="{$row->url()}">
+            <img src='{file="$row->image" extension="reviews_Product"}' class="ipsImage cProductListImage">
+        </a>
+    </div>
+    <div class="ipsDataItem_main">
+        <h4 class="ipsDataItem_title"><a href="{$row->url()}">{$row->name}</a> {{if $row->hidden()}}<span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_warning" data-ipsTooltip title='{lang="product_hidden"}'><i class='fa fa-eye-slash'></i></span>{{endif}}</h4>
+        <div class="ipsDataItem_meta ipsType_normal">
+            <div>
+                {template="rating" app="core" group="global" params="'large', $row->averageRating()"}
+                <span>{lang="product_reviews" pluralize="$row->total_reviews"}</span>
+            </div>
+            {{if $row->description}}
+            <div data-ipsTruncate data-ipsTruncate-size="3 lines" data-ipsTruncate-type="remove">
+                {$row->description|raw}
+            </div>
+            {{endif}}
+        </div>
+    </div>
+</li>
+{{endforeach}}]]></template>
+ <template template_group="category" template_name="view" template_data="$category, $table" template_app="reviews" template_location="front"><![CDATA[<h1 class="ipsType_pageTitle">{$category->name}</h1>
+<div class="ipsType_bold">{lang="category_products" pluralize="$category->getContentItemCount()"}</div>
+<section class="ipsSpacer_top">
+    {$table|raw}
+</section>]]></template>
+ <template template_group="global" template_name="commentTableHeader" template_data="$comment, $review" template_app="reviews" template_location="front"><![CDATA[<div>
+    <h3 class='ipsType_sectionHead ipsContained_container'>
+        <span class='ipsType_break ipsContained'>
+			<a href='{$comment->url()}' title='{lang="view_this_review" sprintf="$review->title"}' class='ipsTruncate ipsTruncate_line'>{$review->title}</a>
+		</span>
+        {template="rating" group="global" location="front" app="core" params="'large', $review->overall"}
+    </h3>
+    <p class='ipsType_normal ipsType_light ipsType_blendLinks ipsType_reset'>{lang="in"} <a href='{$review->container()->url()}'>{$review->container()->_title}</a></p>
+</div>]]></template>
+ <template template_group="global" template_name="reviewRows" template_data="$table, $headers, $rows" template_app="reviews" template_location="front"><![CDATA[{{foreach $rows as $row}}
+<li class="ipsDataItem">
+    <div class="ipsDataItem_icon ipsPos_top">
+        {template="userPhoto" app="core" params="$row->author(), 'mini'" group="global"}
+    </div>
+    <div class="ipsDataItem_main">
+        <h4 class="ipsDataItem_title">
+            {{if $row->hidden() === 1}}
+            <span><span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_warning" data-ipsTooltip title='{lang="pending_approval"}'><i class='fa fa-warning'></i></span></span>
+            {{endif}}
+            {{if $row->mapped('pinned')}}
+            <span><span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_positive" data-ipsTooltip title='{lang="pinned"}'><i class='fa fa-thumb-tack'></i></span></span>
+            {{endif}}
+            <a href="{$row->url()}">{$row->title}</a>
+        </h4>
+        <p class="ipsDataItem_meta ipsType_light ipsType_blendLinks">
+            {template="rating" app="core" params="'large', $row->overall, 5" group="global"}
+            <br>
+            {lang="byline" htmlsprintf="$row->author()->link()"} {datetime="$row->_date"} &middot; {lang="review_comments" pluralize="$row->total_comments"}
+            <p class='ipsType_normal ipsType_richText ipsType_break ipsSpacer_both'>
+                {{if $row->pros}}
+                <div><span class='ipsType_bold'>{lang="product_pros"}:</span> {$row->pros}</div>
+                {{endif}}
+                {{if $row->cons}}
+                <div><span class='ipsType_bold'>{lang="product_cons"}:</span> {$row->cons}</div>
+                {{endif}}
+                <div data-ipsTruncate data-ipsTruncate-size="4 lines" data-ipsTruncate-type="remove">
+                    {$row->truncated( true )|raw}
+                </div>
+                <a href="{$row->url()}">{lang="read_more"}</a>
+            </p>
+        </p>
+    </div>
+</li>
+{{endforeach}}]]></template>
+ <template template_group="global" template_name="searchResultProductSnippet" template_data="$product, $condensed" template_app="reviews" template_location="front"><![CDATA[{{if $condensed}}
+
+{template="rating" app="core" params="'small', $product->averageRating(), 5" group="global"}
+<br>
+{{if $image = $product->image}}
+<a href="{$product->url()}"><img src='{file="$product->image" extension="reviews_Product"}' class="cProductImage_thumb"></a>
+{{endif}}
+
+{{else}}
+
+<div class="ipsColumns ipsColumns_collapsePhone">
+    <div class="ipsColumn ipsColumn_wide">
+        <div class="ipsBox ipsPad_half">
+            {{if $product->image}}
+            <div class="ipsType_center">
+                <a href="{$product->url()}"><img src='{file="$product->image" extension="reviews_Product"}' class="cProductImage_thumb"></a>
+            </div>
+            {{endif}}
+        </div>
+    </div>
+    <div class="ipsColumn ipsColumn_fluid">
+        <h3 class="ipsType_large"><a href="{$product->url()}">{$product->name}</a></h3>
+        {template="rating" app="core" params="'medium', $product->averageRating(), 5" group="global"}
+        <div class="ipsType_richText ipsType_break ipsContained ipsType_normal">
+            <div data-ipsTruncate data-ipsTruncate-size="4 lines" data-ipsTruncate-type="remove">
+                {$product->truncated( true )|raw}
+            </div>
+        </div>
+    </div>
+</div>
+
+{{endif}}]]></template>
+ <template template_group="global" template_name="searchResultReviewSnippet" template_data="$review, $condensed" template_app="reviews" template_location="front"><![CDATA[{{if $condensed}}
+
+{template="rating" app="core" params="'small', $review->overall, 5" group="global"}
+
+{{else}}
+
+<div class="ipsColumns ipsColumns_collapsePhone">
+    {{$product = $review->product();}}
+    <div class="ipsColumn ipsColumn_wide">
+        <div class="ipsBox ipsPad_half">
+            <div class="ipsType_light">{lang="review_of_product"}</div>
+            <h2 class="ipsType_large"><a href="{$product->url()}">{$product->name}</a></h2>
+            {{if $product->image}}
+            <div class="ipsType_center">
+                <a href="{$product->url()}"><img src='{file="$product->image" extension="reviews_Product"}' class="cProductImage_thumb"></a>
+            </div>
+            {{endif}}
+        </div>
+    </div>
+    <div class="ipsColumn ipsColumn_fluid">
+        <h3 class="ipsType_large"><a href="{$review->url()}">{$review->title}</a></h3>
+        {template="rating" app="core" params="'medium', $review->overall, 5" group="global"}
+        <div class="ipsType_richText ipsType_break ipsContained ipsType_normal">
+            {{if $review->pros}}
+            <div><span class="ipsType_bold">{lang="review_pros"}:</span> {$review->pros}</div>
+            {{endif}}
+            {{if $review->cons}}
+            <div><span class="ipsType_bold">{lang="review_cons"}:</span> {$review->cons}</div>
+            {{endif}}
+            <div data-ipsTruncate data-ipsTruncate-size="4 lines" data-ipsTruncate-type="remove">
+                {$review->truncated( true )|raw}
+            </div>
+        </div>
+    </div>
+</div>
+
+{{endif}}]]></template>
+ <template template_group="product" template_name="detailedRatings" template_data="$ratings=array()" template_app="reviews" template_location="front"><![CDATA[{{if \is_array( $ratings ) && \count( $ratings )}}
+<div class="ipsBox ipsSpacer_top ipsPad_half ipsType_left">
+    <h3 class="ipsType_minorHeading">{lang="detailed_ratings"}</h3>
+    {{foreach $ratings as $name => $score}}
+    <div class="ipsClearfix">
+        <div class="ipsPos_left ipsType_light">{$name}</div>
+        <div class="ipsPos_right">
+            {template="rating" app="core" group="global" params="'medium', $score"}
+        </div>
+    </div>
+    {{endforeach}}
+</div>
+{{endif}}]]></template>
+ <template template_group="product" template_name="ratingDistribution" template_data="$ratings=array()" template_app="reviews" template_location="front"><![CDATA[<div class="ipsBox ipsSpacer_top ipsPad_half ipsType_left">
+    <h3 class="ipsType_minorHeading">{lang="rating_distribution"}</h3>
+    {{foreach $ratings as $stars => $percent}}
+    <div class="cProduct_ratingRow {{if $percent == 0}}cProduct_ratingZero{{endif}} ipsClearfix">
+        <div class="ipsPos_left">
+            {template="rating" app="core" group="global" params="'medium', $stars"} <span class="ipsType_light">{$percent}%</span>
+        </div>
+        <div class="ipsProgressBar ipsProgressBar_small ipsPos_right">
+            <div class='ipsProgressBar_progress' style='width: {$percent}%'>
+            </div>
+        </div>
+    </div>
+    {{endforeach}}
+</div>]]></template>
+ <template template_group="product" template_name="reviewForm" template_data="$product, $form" template_app="reviews" template_location="front"><![CDATA[<div class="ipsPageHeader ipsClearfix">
+    <h1 class="ipsType_pageTitle">{$product->name}</h1>
+</div>
+{$form|raw}]]></template>
+ <template template_group="product" template_name="reviewRows" template_data="$table, $headers, $rows" template_app="reviews" template_location="front"><![CDATA[{{foreach $rows as $row}}
+<div class="ipsSpacer_both cReviewRow ipsPad_half {{if $row->hidden()}}ipsModerated{{endif}}">
+    <div class="ipsPhotoPanel ipsPhotoPanel_mini ipsPhotoPanel_notPhone">
+        {template="userPhoto" app="core" params="$row->author(), 'mini'" group="global"}
+        <div>
+            <h2 class="ipsType_sectionHead ipsType_blendLinks ipsContained_container">
+                {{if $row->hidden() === 1}}
+                <span><span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_warning" data-ipsTooltip title='{lang="pending_approval"}'><i class='fa fa-warning'></i></span></span>
+                {{elseif $row->hidden()}}
+                <span><span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_warning" data-ipsTooltip title='{lang="review_hidden"}'><i class='fa fa-eye-slash'></i></span></span>
+                {{endif}}
+                <a href="{$row->url()}">{$row->title}</a>
+            </h2>
+            <p class='ipsType_light ipsType_reset ipsType_blendLinks'>
+                {template="rating" app="core" params="'large', $row->overall, 5" group="global"}
+                <br>
+                {lang="byline" htmlsprintf="$row->author()->link()"} {datetime="$row->_date"} &middot; {lang="review_comments" pluralize="$row->total_comments"}
+            </p>
+        </div>
+    </div>
+    <section class='ipsType_normal ipsType_richText ipsType_break ipsSpacer_both'>
+        {{if $row->pros}}
+        <div><span class='ipsType_bold'>{lang="product_pros"}:</span> {$row->pros}</div>
+        {{endif}}
+        {{if $row->cons}}
+        <div><span class='ipsType_bold'>{lang="product_cons"}:</span> {$row->cons}</div>
+        {{endif}}
+        <div data-ipsTruncate data-ipsTruncate-size="6 lines" data-ipsTruncate-type="remove">
+        {$row->truncated( true )|raw}
+        </div>
+        <a href="{$row->url()}">{lang="read_more"}</a>
+    </section>
+    {{if $row->can( 'moderate' )}}
+    <ul class="ipsList_inline ipsType_blendLinks ipsType_small">
+        <li>
+            <a href="{$row->url( 'edit' )}"><i class='fa fa-edit'></i> {lang="edit"}</a>
+        </li>
+        {{if $row->canHide()}}
+        <li>
+            <a href="{$row->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'hide' ) )}"><i class='fa fa-minus'></i> {lang="hide"}</a>
+        </li>
+        {{endif}}
+        {{if $row->canUnhide()}}
+        <li>
+            <a href="{$row->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unhide' ) )}"><i class='fa fa-check'></i> {lang="unhide"}</a>
+        </li>
+        {{endif}}
+        {{if $row->canMove()}}
+        <li>
+            <a href="{$row->url()->csrf()->setQueryString( 'do', 'move' )}" data-ipsDialog data-ipsDialog-title='{lang="move_review"}' data-ipsDialog-size="narrow"><i class='fa fa-arrow-right'></i> {lang="move"}</a>
+        </li>
+        {{endif}}
+    </ul>
+    {{endif}}
+</div>
+{{endforeach}}]]></template>
+ <template template_group="product" template_name="reviewTable" template_data="$table, $headers, $rows, $quickSearch" template_app="reviews" template_location="front"><![CDATA[<div class="cReviewTable" data-baseurl='{$table->baseUrl}' data-resort='{$table->resortKey}' data-controller='core.global.core.table' id='elTable_{$table->uniqueId}'>
+    {{if $table->pages > 1}}
+    <div class="ipsButtonBar ipsPad_half ipsClearfix ipsClear">
+        <div data-role="tablePagination">
+            {template="pagination" group="global" app="core" location="global" params="$table->baseUrl, $table->pages, $table->page, $table->limit, TRUE, $table->getPaginationKey()"}
+        </div>
+    </div>
+    {{endif}}
+
+    <div class='ipsClear {{foreach $table->classes as $class}}{$class} {{endforeach}}' id='elTable_{$table->uniqueId}' data-role="tableRows">
+        {template="$table->rowsTemplate[1]" params="$table, $headers, $rows" object="$table->rowsTemplate[0]"}
+    </div>
+    {{if $table->pages > 1}}
+    <div class="ipsButtonBar ipsPad_half ipsClearfix ipsClear">
+        <div data-role="tablePagination">
+            {template="pagination" group="global" app="core" location="global" params="$table->baseUrl, $table->pages, $table->page, $table->limit, TRUE, $table->getPaginationKey()"}
+        </div>
+    </div>
+    {{endif}}
+</div>]]></template>
+ <template template_group="product" template_name="view" template_data="$product, $table" template_app="reviews" template_location="front"><![CDATA[<div class="ipsPageHeader ipsClearfix">
+    <div class="ipsPos_left">
+        <div class="ipsType_large ipsType_light">{$product->root()->_title}</div>
+        <div class="ipsType_pageTitle">
+            {{if $product->hidden()}}
+            <span><span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_warning" data-ipsTooltip title='{lang="product_hidden"}'><i class='fa fa-eye-slash'></i></span></span>
+            {{endif}}
+            {$product->name}
+        </div>
+    </div>
+    <ul class="ipsToolList ipsToolList_horizontal">
+        {{if $product->canReview()}}
+        <li>
+            <a href="{$product->url( 'writeReview' )}" class="ipsButton ipsButton_important ipsButton_fullWidth">{lang="write_review"}</a>
+        </li>
+        {{endif}}
+        {{if $product->can( 'moderate' )}}
+        <li>
+            <a href="#elProductMenu_menu" id="elProductMenu" data-ipsMenu class="ipsButton ipsButton_primary ipsButton_fullWidth">{lang="moderate_product"} <i class="fa fa-caret-down"></i></a>
+        </li>
+        {{elseif $product->canEdit()}}
+        <ul class="ipsToolList ipsToolList_horizontal">
+            <li>
+                <a href="{$product->url( 'edit' )}" class="ipsButton ipsButton_primary ipsButton_fullWidth">{lang="edit_product"}</a>
+            </li>
+        </ul>
+        {{endif}}
+    </ul>
+    {{if $product->can( 'moderate' )}}
+    <ul id="elProductMenu_menu" class="ipsMenu ipsMenu_auto ipsHide">
+        <li class="ipsMenu_item">
+            <a href="{$product->url( 'edit' )}">{lang="edit_product"}</a>
+        </li>
+        <li class="ipsMenu_item">
+            <a href="{$product->url( 'assign' )}" data-ipsDialog data-ipsDialog-size="narrow" data-ipsDialog-title="{lang="assign_product"}">{lang="assign_product"}</a>
+        </li>
+    </ul>
+    {{endif}}
+</div>
+
+<div class="ipsColumns ipsColumns_collapsePhone">
+    <div class="ipsColumn ipsColumn_wide ipsType_center">
+        {{if $product->image}}
+        <a href='{file="$product->image" extension="reviews_Product"}' data-ipsLightbox><img src='{file="$product->image" extension="reviews_Product"}' class="cProductImage"></a>
+        {{if $product->image_description}}
+        <div class="ipsType_small ipsSpacer_top ipsSpacer_half">
+            {$product->image_description}
+        </div>
+        {{endif}}
+        {{endif}}
+        {{if $product->owner() !== null}}
+        <div class="ipsSpacer_top ipsType_normal">
+            {lang="product_owned_by"} {$product->owner()->link()|raw}
+        </div>
+        {{endif}}
+        {{if $product->total_reviews}}
+        {template="ratingDistribution" app="reviews" group="product" params="$product->ratingDistribution()"}
+        {template="detailedRatings" app="reviews" group="product" params="$product->detailedRatings()"}
+        {{endif}}
+    </div>
+    <div class="ipsColumn ipsColumn_fluid">
+        {{$rating = $product->averageRating();}}
+        {template="rating" app="core" group="global" params="'veryLarge', $rating"} <span class="ipsType_light">{lang="product_rating_info" sprintf="$rating, $product->total_reviews" pluralize="$rating, $product->total_reviews"}</span>
+        {{if $product->weighted > 0}}
+        <div class="ipsSpacer_top ipsType_large">
+            {lang="product_ranking" sprintf="$product->categoryRanking(), $product->container()->getContentItemCount(), $product->container()->_title"}
+        </div>
+        {{endif}}
+        {{if \is_array( $product->pros ) && \count( $product->pros )}}
+        <div class="ipsSpacer_top ipsType_normal">
+            <div class="ipsType_bold">{lang="product_pros"}:</div>
+            {{foreach $product->pros as $pro}}
+            <div>
+                <a href="{$pro->url()}">&ldquo;{$pro->pros}&rdquo;</a>
+            </div>
+            {{endforeach}}
+        </div>
+        {{endif}}
+        {{if \is_array( $product->cons ) && \count( $product->cons )}}
+        <div class="ipsSpacer_top ipsType_normal">
+            <div class="ipsType_bold">{lang="product_cons"}:</div>
+            {{foreach $product->cons as $con}}
+            <div>
+                <a href="{$con->url()}">&ldquo;{$con->cons}&rdquo;</a>
+            </div>
+            {{endforeach}}
+        </div>
+        {{endif}}
+        {{if $product->description}}
+        <div class="ipsSpacer_top ipsType_normal">
+            <div class="ipsType_bold">{lang="product_about"}:</div>
+            <div class="ipsType_richText ipsType_break ipsContained">{$product->description|raw}</div>
+        </div>
+        {{endif}}
+    </div>
+</div>
+<section class="ipsSpacer_top">
+    <h2 class='ipsType_sectionTitle ipsType_reset ipsClear ipsClearfix'>
+        {lang="review_table_header"}
+    </h2>
+    {$table|raw}
+</section>]]></template>
+ <template template_group="review" template_name="comments" template_data="$review" template_app="reviews" template_location="front"><![CDATA[<div class='ipsBox'>
+    <div data-controller='core.front.core.commentFeed, core.front.core.ignoredComments' {{if settings.auto_polling_enabled}}data-autoPoll{{endif}} data-baseURL='{$review->url()}' data-feedID='review-{$review->id}' id='comments'>
+        <div class='ipsPad'>
+            <h2 class='ipsType_sectionHead' data-role="comment_count">{lang="num_comments_uc" pluralize="$review->total_comments"}</h2>
+            <hr class='ipsHr'>
+            {{if $review->commentPageCount() > 1}}
+            {$review->commentPagination( array('tab') )|raw}
+            <br><br>
+            {{endif}}
+            <div data-role='commentFeed' data-controller='core.front.core.moderation'>
+                {{if \count( $review->comments( NULL, NULL, 'date', 'asc', NULL, NULL, NULL, NULL, FALSE, isset( \IPS\Request::i()->showDeleted ) ) )}}
+                <form action="{$review->url()->csrf()->setQueryString( 'do', 'multimodComment' )}" method="post" data-ipsPageAction data-role='moderationTools'>
+                    {{foreach $review->comments( NULL, NULL, 'date', 'asc', NULL, NULL, NULL, NULL, FALSE, isset( \IPS\Request::i()->showDeleted ) ) as $comment}}
+                    {$comment->html()|raw}
+                    {{endforeach}}
+                    {template="commentMultimod" app="core" group="global" params="$review"}
+                </form>
+                {{else}}
+                <p class='ipsType_normal ipsType_light ipsType_reset' data-role='noComments'>{lang="no_comments"}</p>
+                {{endif}}
+            </div>
+            {{if $review->commentPageCount() > 1}}
+            <hr class='ipsHr'>
+            {$review->commentPagination( array('tab') )|raw}
+            {{endif}}
+            {{if $review->commentForm() || $review->locked() || \IPS\Member::loggedin()->restrict_post || \IPS\Member::loggedIn()->members_bitoptions['unacknowledged_warnings']}}
+            <div class='ipsAreaBackground ipsPad ipsClear ipsSpacer_top' data-role='replyArea'>
+                {{if $review->commentForm()}}
+                {{if $review->locked()}}
+                <p class='ipsType_reset ipsType_warning ipsComposeArea_warning ipsSpacer_bottom ipsSpacer_half'><i class='fa fa-info-circle'></i> {lang="blog_entry_locked_can_comment"}</p>
+                {{endif}}
+                {$review->commentForm()|raw}
+                {{else}}
+                {{if $review->locked()}}
+                {template="commentUnavailable" group="forms" location="front" app="core" params="'blog_entry_locked_cannot_comment'"}
+                {{elseif \IPS\Member::loggedin()->restrict_post}}
+                {template="commentUnavailable" group="forms" location="front" app="core" params="'restricted_cannot_comment', \IPS\Member::loggedIn()->warnings(5,NULL,'rpa'), \IPS\Member::loggedIn()->restrict_post"}
+                {{elseif \IPS\Member::loggedIn()->members_bitoptions['unacknowledged_warnings']}}
+                {template="commentUnavailable" group="forms" location="front" app="core" params="'unacknowledged_warning_cannot_post', \IPS\Member::loggedIn()->warnings( 1, FALSE )"}
+                {{endif}}
+                {{endif}}
+            </div>
+            {{endif}}
+        </div>
+    </div>
+</div>
+]]></template>
+ <template template_group="review" template_name="productBox" template_data="$review, $product" template_app="reviews" template_location="front"><![CDATA[<div class="ipsBox ipsPad_half">
+    <div class="ipsType_light">{lang="review_of_product"}</div>
+    <h2 class="ipsType_large"><a href="{$product->url()}">{$product->name}</a></h2>
+    {{if $product->image}}
+    <div class="ipsType_center">
+        <a href="{$product->url()}"><img src='{file="$product->image" extension="reviews_Product"}' class="cProductImage_thumb"></a>
+    </div>
+    {{endif}}
+    {{$ratings = $review->detailedRatings();}}
+    {{if \count( $ratings )}}
+    <div class="ipsType_minorHeading ipsSpacer_top">{lang="detailed_ratings"}</div>
+    {{foreach $ratings as $rating}}
+    <div class="ipsClearfix">
+        <div class="ipsPos_left">{$rating['rating_name']}:</div>
+        <div class="ipsPos_right">{$rating['rating_score']}</div>
+    </div>
+    {{endforeach}}
+    {{endif}}
+</div>]]></template>
+ <template template_group="review" template_name="view" template_data="$review" template_app="reviews" template_location="front"><![CDATA[{{$product = $review->product();}}
+<div class="ipsPageHeader ipsClearfix">
+    <div class="ipsPos_left">
+        <div class="ipsType_large ipsType_light">{$product->container()->_title}</div>
+        <div class="ipsType_pageTitle">
+            {{if $review->hidden() == 1}}
+            <span><span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_warning" data-ipsTooltip title='{lang="pending_approval"}'><i class='fa fa-warning'></i></span></span>
+            {{elseif $review->hidden()}}
+            <span><span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_warning" data-ipsTooltip title='{lang="review_hidden"}'><i class='fa fa-eye-slash'></i></span></span>
+            {{endif}}
+            {$review->title}
+        </div>
+    </div>
+    {{if $review->can( 'moderate' )}}
+    <ul class="ipsToolList ipsToolList_horizontal">
+        <li>
+            <a href="#elReviewMenu_menu" id="elReviewMenu" data-ipsMenu class="ipsButton ipsButton_important ipsButton_verySmall">{lang="moderate_review"} <i class="fa fa-caret-down"></i></a>
+        </li>
+    </ul>
+    <ul id="elReviewMenu_menu" class="ipsMenu ipsMenu_auto ipsHide">
+        <li class="ipsMenu_item">
+            <a href="{$review->url( 'edit' )}">{lang="edit_review"}</a>
+        </li>
+        {{if $review->canHide()}}
+        <li class="ipsMenu_item">
+            <a href="{$review->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'hide' ) )}">{lang="hide_review"}</a>
+        </li>
+        {{endif}}
+        {{if $review->canUnhide()}}
+        <li class="ipsMenu_item">
+            <a href="{$review->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unhide' ) )}">{lang="unhide_review"}</a>
+        </li>
+        {{endif}}
+        {{if $review->canMove()}}
+        <li class="ipsMenu_item">
+            <a href="{$review->url()->csrf()->setQueryString( 'do', 'move' )}" data-ipsDialog data-ipsDialog-title='{lang="move_review"}' data-ipsDialog-size="narrow">{lang="move_review"}</a>
+        </li>
+        {{endif}}
+        {{if $review->canDelete()}}
+        <li class="ipsMenu_item">
+            <a href="{$review->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'delete' ) )}" data-confirm>{lang="delete_review"}</a>
+        </li>
+        {{endif}}
+    </ul>
+    {{elseif $review->canEdit()}}
+    <ul class="ipsToolList ipsToolList_horizontal">
+        <li>
+            <a href="{$review->url( 'edit' )}" class="ipsButton ipsButton_important ipsButton_verySmall">{lang="edit_review"}</a>
+        </li>
+    </ul>
+    {{endif}}
+    <div class="ipsPos_right">
+        {template="follow" app="core" group="global" params="'reviews', 'review', $review->id, $review->followersCount()"}
+    </div>
+</div>
+<div class="ipsColumns ipsColumns_collapsePhone">
+    <div class="ipsColumn ipsColumn_medium">
+        {template="productBox" app="reviews" group="review" params="$review, $product"}
+    </div>
+    <div class="ipsColumn ipsColumn_fluid">
+        <div class="ipsPhotoPanel ipsPhotoPanel_mini ipsPhotoPanel_notPhone">
+            {template="userPhoto" app="core" params="$review->author(), 'mini'" group="global"}
+            <div>
+                <p class='ipsType_light ipsType_reset ipsType_blendLinks'>
+                    {template="rating" app="core" params="'large', $review->overall, 5" group="global"}
+                    <br>
+                    {lang="byline" htmlsprintf="$review->author()->link()"} {datetime="$review->_date"} &middot; {lang="review_views" pluralize="$review->views"} &middot; {lang="review_comments" pluralize="$review->total_comments"}
+                </p>
+            </div>
+        </div>
+        <div class="ipsType_richText ipsType_break ipsContained ipsType_normal">
+            {{if $review->pros}}
+            <div><span class="ipsType_bold">{lang="review_pros"}:</span> {$review->pros}</div>
+            {{endif}}
+            {{if $review->cons}}
+            <div><span class="ipsType_bold">{lang="review_cons"}:</span> {$review->cons}</div>
+            {{endif}}
+            <div class="ipsSpacer_top cReviewContent">
+                {$review->content|raw}
+            </div>
+        </div>
+    </div>
+</div>
+<section class="ipsSpacer_top">
+    {template="comments" app="reviews" group="review" params="$review"}
+</section>]]></template>
+ <template template_group="widgets" template_name="reviewFeed" template_data="$reviews, $title, $orientation='vertical'" template_app="reviews" template_location="front"><![CDATA[{{if !empty( $reviews ) }}
+<h3 class='ipsWidget_title ipsType_reset'>{$title}</h3>
+<div class='ipsPad_half ipsWidget_inner'>
+    <ul class='ipsDataList ipsDataList_reducedSpacing'>
+        {{foreach $reviews as $review}}
+        <li class='ipsDataItem{{if $review->unread()}} ipsDataItem_unread{{endif}}{{if $review->hidden()}} ipsModerated{{endif}}'>
+            <div class='ipsDataItem_icon ipsPos_top'>
+                {template="userPhoto" group="global" app="core" params="$review->author(), 'tiny'"}
+            </div>
+            <div class='ipsDataItem_main cWidgetComments'>
+                <a href="{$review->url()}" class="ipsDataItem_title">{$review->title}</a>
+                <p class='ipsType_reset ipsType_small ipsType_light ipsType_blendLinks ipsContained'>
+                    {template="rating" app="core" params="'small', $review->overall, 5" group="global"}
+                    <br>
+                    {lang="review_of_line"} <a href="{$review->product()->url()}">{$review->product()->name}</a>
+                    <br>
+                    {lang="byline" htmlsprintf="$review->author()->link()"} {datetime="$review->_date"}
+                </p>
+            </div>
+        </li>
+        {{endforeach}}
+    </ul>
+</div>
+{{endif}}]]></template>
+ <css css_location="front" css_app="reviews" css_attributes="" css_path="." css_name="reviews.css">.cCategoryLevel1 {
+    margin-left: 15px;
+}
+
+.cProductImage {
+    max-width: 100%;
+}
+
+.cProduct_ratingZero {
+    opacity: 0.4;
+}
+
+.cProduct_ratingRow .ipsProgressBar {
+    height: 12px;
+    margin-top: 3px;
+    background: #eee;
+}
+
+    .cProduct_ratingRow .ipsProgressBar .ipsProgressBar_progress {
+        background: #999;
+    }
+
+.cReviewRow {
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    border-color: #ebebeb;
+}
+
+.cProductImage_thumb {
+    max-width: 160px;
+}
+
+.cReviewContent img {
+    max-width: 450px !important;
+    max-height: 800px !important;
+}</css>
+</theme>

@@ -1,0 +1,30 @@
+{
+  "smartbanner": {
+    "type": "S",
+    "class": "\\IPS\\Theme\\class_core_front_global"
+  },
+  "conversation": {
+    "type": "C",
+    "class": "\\IPS\\core\\Messenger\\Conversation"
+  },
+  "notifications": {
+    "type": "C",
+    "class": "\\IPS\\core\\modules\\front\\system\\notifications"
+  },
+  "comment": {
+    "type": "C",
+    "class": "\\IPS\\Content\\Comment"
+  },
+  "content": {
+    "type": "C",
+    "class": "\\IPS\\Content"
+  },
+  "output": {
+    "type": "C",
+    "class": "\\IPS\\Output"
+  },
+  "post": {
+    "type": "C",
+    "class": "\\IPS\\forums\\Topic\\Post"
+  }
+}

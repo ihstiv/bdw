@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language>
+ <app key="reviews" version="10003">
+  <word key="__app_reviews" js="0">Reviews</word>
+  <word key="menu__reviews_reviews" js="0">Reviews</word>
+  <word key="menu__reviews_reviews_categories" js="0">Categories</word>
+  <word key="menu__reviews_reviews_products" js="0">Products</word>
+  <word key="module__reviews_reviews" js="0">Reviews</word>
+  <word key="frontnavigation_reviews" js="0">Reviews Category</word>
+  <word key="module__reviews_products" js="0">Products</word>
+  <word key="reviews_category_id" js="0">Category</word>
+  <word key="reviews_use_default" js="0">Use Category Title</word>
+  <word key="reviews_block_title" js="0">Custom Title</word>
+  <word key="group__reviews_Reviews" js="0">Reviews</word>
+  <word key="g_view_reviews" js="0">Can view Reviews</word>
+  <word key="g_moderate_reviews" js="0">Can moderate Reviews and Products</word>
+  <word key="g_review_reviews" js="0">Can Write Reviews</word>
+  <word key="g_product_reviews" js="0">Can Add new Products</word>
+  <word key="g_comment_reviews" js="0">Can Comment on Reviews</word>
+  <word key="reviews_categories" js="0">Reviews Categories</word>
+  <word key="reviews_categories_add_child" js="0">Add Child Category</word>
+  <word key="category_ratings" js="0">Detailed Ratings</word>
+  <word key="category_ratings_desc" js="0">If omitted, this will inherit from the parent</word>
+  <word key="category_schemaname" js="0">Schema Name</word>
+  <word key="category_schemaname_desc" js="0"><![CDATA[The object name that will be used in markup. Must be a valid type at schema.org.<br>If omitted, will inherit from the parent]]></word>
+  <word key="reviews_products" js="0">Products</word>
+  <word key="new_product" js="0">New Product</word>
+  <word key="edit_product" js="0">Edit Product</word>
+  <word key="delete_product" js="0">Delete Product</word>
+  <word key="product_name" js="0">Name</word>
+  <word key="product_title" js="0">Name</word>
+  <word key="product_category" js="0">Category</word>
+  <word key="product_description" js="0">Description</word>
+  <word key="product_image" js="0">Image</word>
+  <word key="product_image_description" js="0">Image Description</word>
+  <word key="product_image_description_desc" js="0">Will be displayed under the product image</word>
+  <word key="product_extra_enabled" js="0">Allow Extra Ratings</word>
+  <word key="product_extra_title" js="0">Title</word>
+  <word key="product_extra_desc" js="0">Description</word>
+  <word key="product_extra_ratings" js="0">Ratings</word>
+  <word key="product_enabled" js="0">Enabled</word>
+  <word key="reviews" js="0">Reviews</word>
+  <word key="category_products" js="0">{# [1:Entry][?:Entries]}</word>
+  <word key="product_reviews" js="0">{# [1:Review][?:Reviews]}</word>
+  <word key="moderate_product" js="0">Moderate</word>
+  <word key="assign_product" js="0">Assign Product Owner</word>
+  <word key="product_owned_by" js="0">Owned by</word>
+  <word key="product_rating_info" js="0">(Rated %s {!#[1:star][?:stars]} with %s {!#[1:review][?:reviews]})</word>
+  <word key="product_pros" js="0">Pros</word>
+  <word key="product_cons" js="0">Cons</word>
+  <word key="product_about" js="0">About</word>
+  <word key="rating_distribution" js="0">Ratings Distribution</word>
+  <word key="detailed_ratings" js="0">Detailed Ratings</word>
+  <word key="product_ranking" js="0"><![CDATA[<span class='ipsType_bold'>Rated #%s</span> of %s %s on BDW]]></word>
+  <word key="review_comments" js="0">{# [1:Comment][?:Comments]}</word>
+  <word key="review_table_header" js="0">Member Reviews</word>
+  <word key="product_owner" js="0">Member</word>
+  <word key="product_hidden" js="0">This product is hidden</word>
+  <word key="review_views" js="0">{# [1:View][?:Views]}</word>
+  <word key="review_pros" js="0">Pros</word>
+  <word key="review_cons" js="0">Cons</word>
+  <word key="review_of_product" js="0">This is a review of:</word>
+  <word key="moderate_review" js="0">Moderate</word>
+  <word key="write_review" js="0">Write a Review</word>
+  <word key="review_title" js="0">Title</word>
+  <word key="review_content" js="0">Write about your experience</word>
+  <word key="review_rating" js="0">Overall Rating</word>
+  <word key="review__comment_placeholder" js="0">Add a Comment...</word>
+  <word key="review_submit_comment" js="0">Submit</word>
+  <word key="hide_review" js="0">Hide Review</word>
+  <word key="unhide_review" js="0">Unhide Review</word>
+  <word key="move_review" js="0">Move to another product</word>
+  <word key="delete_review" js="0">Delete Review</word>
+  <word key="review_hidden" js="0">This review is hidden</word>
+  <word key="review_auto_follow_suffix" js="0">Notify me of replies</word>
+  <word key="review_comment_pl_lc" js="0">review comments</word>
+  <word key="review_review_pl_lc" js="0">reviews</word>
+  <word key="__indefart_review_review" js="0">a review</word>
+  <word key="__defart_review_review" js="0">review</word>
+  <word key="__indefart_review_comment" js="0">a comment on a review</word>
+  <word key="__defart_review_comment" js="0">comment on a review</word>
+  <word key="__indefart_reviews_products" js="0">a product</word>
+  <word key="__defart_reviews_products" js="0">product</word>
+  <word key="review_review_pl" js="0">Reviews</word>
+  <word key="review_comment_pl" js="0">Review Comments</word>
+  <word key="reviews_review_pl" js="0">Reviews</word>
+  <word key="reviews_products_pl" js="0">Resorts and Vendors</word>
+  <word key="reviews_products_pl_lc" js="0">resorts and vendors</word>
+  <word key="reviews_product_pl" js="0">Resorts and Vendors</word>
+  <word key="reviews_product_pl_lc" js="0">resorts and vendors</word>
+  <word key="review_comment" js="0">Review Comments</word>
+  <word key="review_review" js="0">Reviews</word>
+  <word key="reviews_product" js="0">Products</word>
+  <word key="search_contextual_item_reviews_categories" js="0">This category</word>
+  <word key="search_contextual_item_reviews_products" js="0">This product</word>
+  <word key="block_ReviewFeed" js="0">Reviews Feed</word>
+  <word key="block_ReviewFeed_desc" js="0"></word>
+  <word key="widget_feed_container_review_review" js="0">Category</word>
+  <word key="review_of_line" js="0">Review of:</word>
+  <word key="gallery_rebuild_queued" js="0">Images have been queued for rebuild. This may take several hours to complete.</word>
+ </app>
+</language>

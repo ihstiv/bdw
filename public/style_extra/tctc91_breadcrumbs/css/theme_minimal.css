@@ -1,0 +1,62 @@
+/****************************************************************************/
+/* Custom Breadcrumbs By Tom Christian                                      */
+/* Theme: theme_minimal.css                                                 */ 
+/****************************************************************************/
+
+/* Theme Specific */
+#secondary_navigation.homeIcon li:first-child a {
+    background-position: 0 2px;
+    padding-left: 12px;
+}
+
+#secondary_navigation .breadcrumb.top li {
+    margin: 0;
+    height: 37px;
+}
+
+#secondary_navigation .breadcrumb.top li:first-child span { background: none; }
+
+#secondary_navigation .breadcrumb.top li span {
+    background: url(../img/sprite_icons.png) no-repeat 2px -18px;
+    width: 7px;
+    height: 6px;
+    padding: 1px 2px 0 22px;
+}
+
+#secondary_navigation .breadcrumb.top li:hover {
+    height: 37px;
+}
+
+/* Core Styles */
+#secondary_navigation .nav_sep { 
+    display: none;
+}
+
+#secondary_navigation {
+    color: #444;
+    line-height: 37px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    height: 37px;
+    position: relative;
+}
+
+#secondary_navigation a { color: #444; height: 35px; outline: 0 none; }
+#secondary_navigation a:hover { color: #2b3238; }
+
+#secondary_navigation .breadcrumb.top { font-size: 13px !important; margin-bottom: 0 !important; }
+#secondary_navigation .breadcrumb.top li { float: left; margin-right: 0; }
+
+#secondary_navigation .breadcrumb li a {
+    text-decoration: none;
+    padding: 5px 0;
+}
+
+#secondary_navigation .breadcrumb li span {
+    color: #555;
+    padding: 0 5px 0 5px;
+    margin: 0;
+}
+
+#secondary_navigation .breadcrumb li > span { color: #888; }
+#secondary_navigation .breadcrumb li:first-child a span { padding-left: 13px; }

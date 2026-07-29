@@ -1,0 +1,30 @@
+{
+    "1": {
+        "method": "dropColumn",
+        "params": [
+            "featuredcontent_sliders",
+            "fcs_popup"
+        ]
+    },
+    "2": {
+        "method": "changeColumn",
+        "params": [
+            "featuredcontent_sliders",
+            "fcs_newwin",
+            {
+                "name": "fcs_viewlinkin",
+                "type": "TEXT",
+                "length": 1,
+                "decimals": null,
+                "values": [],
+                "allow_null": true,
+                "default": "0",
+                "comment": "",
+                "unsigned": false,
+                "zerofill": false,
+                "auto_increment": false,
+                "binary": false
+            }
+        ]
+    }
+}
