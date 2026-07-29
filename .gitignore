@@ -42,3 +42,6 @@ Thumbs.db
 *.swp
 *.swo
 *~
+
+# --- Per-environment web-server rules (each server keeps its own; prod has the SEO redirect set) ---
+/.htaccess
