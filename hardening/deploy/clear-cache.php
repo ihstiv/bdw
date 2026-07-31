@@ -19,4 +19,12 @@ try { \IPS\Theme::deleteCompiledCss(); $done[]='compiledCss'; } catch(\Throwable
 try { \IPS\Theme::deleteCompiledResources(); $done[]='themeResources'; } catch(\Throwable $e){ /* optional */ }
 try { \IPS\Data\Store::i()->clearAll(); $done[]='store'; } catch(\Throwable $e){ echo "store: ".$e->getMessage()."\n"; }
 try { \IPS\Data\Cache::i()->clearAll(); $done[]='cache'; } catch(\Throwable $e){ echo "cache: ".$e->getMessage()."\n"; }
+/* The guest page OUTPUT cache lives in Redis (OUTPUT_CACHE_METHOD=Redis) — flush it directly */
+try {
+	if ( class_exists('\\IPS\\Redis') ) {
+		$redis = \IPS\Redis::i();
+		try { $redis->flushDb(); $done[]='redis.flushDb'; }
+		catch(\Throwable $e2){ $redis->flushAll(); $done[]='redis.flushAll'; }
+	}
+} catch(\Throwable $e){ echo "redis: ".$e->getMessage()."\n"; }
 echo "flushed: ".implode(',', $done)."\nDONE\n";
