@@ -1,78 +1,84 @@
+# =========================================================================
+#  robots.txt — Best Destination Wedding (bestdestinationwedding.com)
+#  Goal: keep real search bots (Google/Bing) crawling content; cut load from
+#  scraper/AI bots and infinite low-value URLs. (Cloudflare enforces the hard
+#  blocks — polite crawlers honor this file, abusive ones are blocked at the edge.)
+# =========================================================================
+
+# --- Scrapers / AI crawlers with no real-traffic value: full block ---
 User-agent: AhrefsBot
 Disallow: /
-
 User-agent: SemrushBot
 Disallow: /
-
+User-agent: MJ12bot
+Disallow: /
+User-agent: DotBot
+Disallow: /
+User-agent: BLEXBot
+Disallow: /
+User-agent: DataForSeoBot
+Disallow: /
+User-agent: Barkrowler
+Disallow: /
+User-agent: ZoominfoBot
+Disallow: /
+User-agent: SeekportBot
+Disallow: /
 User-agent: Sogou web spider
 Disallow: /
-
+User-agent: Bytespider
+Disallow: /
+User-agent: PetalBot
+Disallow: /
+User-agent: GPTBot
+Disallow: /
+User-agent: CCBot
+Disallow: /
+User-agent: ClaudeBot
+Disallow: /
+User-agent: anthropic-ai
+Disallow: /
+User-agent: Amazonbot
+Disallow: /
+User-agent: Applebot-Extended
+Disallow: /
+User-agent: ImagesiftBot
+Disallow: /
+User-agent: Diffbot
+Disallow: /
+User-agent: Omgilibot
+Disallow: /
 User-agent: SleepBot
 Disallow: /
 
-User-agent: ClaudeBot
-Disallow: /
-
-
+# --- Everyone else: crawl content, stay off low-value / infinite URLs ---
 User-agent: *
+Crawl-delay: 10
+# Action endpoints & dynamic duplicates
+Disallow: /*?do=
+Disallow: /*&do=
+Disallow: /*?sortby=
+Disallow: /*?sortdirection=
+Disallow: /*?csrfKey=
+Disallow: /*?advancedSearchForm=
+Disallow: /*?controller=embed
+Disallow: /*?_fromLogin
+Disallow: /*?rss
+# Sections with no crawl value
+Disallow: /search/
+Disallow: /discover/
+Disallow: /online/
+Disallow: /login/
+Disallow: /register/
+Disallow: /lostpassword/
+Disallow: /messenger/
+Disallow: /startTopic/
 Disallow: /admin/
-Disallow: /cache/
-Disallow: /hooks/
-Disallow: /ips_kernel/
-Disallow: /public/style_captcha/
-Disallow: /index.php?app=core&module=task
-Disallow: /index.php?app=forums&module=moderate&section=moderate
-Disallow: /index.php?app=core&module=usercp&tab=forums&area=forumsubs
-Disallow: /index.php?app=core&module=usercp&tab=forums&area=watch&watch=topic
-Disallow: /index.php?app=forums&module=extras&section=forward
+Disallow: /cdn-cgi/
+# Legacy IPB URL params (old links still being crawled)
+Disallow: /index.php?app=core&module=search
 Disallow: /index.php?app=members&module=messaging
 Disallow: /index.php?app=members&module=chat
-Disallow: /index.php?app=members&module=search
-Disallow: /index.php?app=core&module=search&do=viewNewContent&search_app=forums
-Disallow: /index.php?app=core&module=search&do=viewNewContent&search_app=members
-Disallow: /index.php?app=core&module=search&do=viewNewContent&search_app=blog
-Disallow: /index.php?app=core&module=search&do=viewNewContent&search_app=gallery
-Disallow: /index.php?app=core&module=search&do=viewNewContent&search_app=ccs
-Disallow: /index.php?app=core&module=search&do=search&fromMainBar=1&search_app=forums
-Disallow: /index.php?app=core&module=search&do=search&fromMainBar=1&search_app=members
-Disallow: /index.php?app=core&module=search&do=search&fromMainBar=1&search_app=blog
-Disallow: /index.php?app=core&module=search&do=search&fromMainBar=1&search_app=gallery
-Disallow: /index.php?app=core&module=search&do=search&fromMainBar=1&search_app=ccs
-Disallow: /index.php?app=reviews&module=extra&section=search&do=search&words=
-Disallow: /index.php?app=reviews&module=extra&section=search
-Disallow: /index.php?app=core&module=search&do=user_activity
-Disallow: /index.php?app=core&module=global&section=reputation&do=add_rating&app_rate=forums
-Disallow: /index.php?app=core&module=attach&section=attach&attach_id=
-Allow:	  /*&search_tags=
-Disallow: /index.php?app=members&module=search&do=active
-Disallow: /index.php?&unlockUserAgent=1
-Disallow: /*app=core&module=usercp
-Disallow: /*app=core&amp;module=usercp
-Disallow: /*app=members&module=messaging
-Disallow: /*&p=
-Disallow: /*&pid=
-Disallow: /*&hl=
-Disallow: /*&start=
-Disallow: /*view__getnewpost$
-Disallow: /*view__getlastpost$
-Disallow: /*view__old$
-Disallow: /*view__new$
-Disallow: /*view__getfirst$
-Disallow: /*view__getprevious$
-Disallow: /*view__getnext$
-Disallow: /*view__getlast$
-Disallow: /*&view=getnewpost$
-Disallow: /*&view=getlastpost$
-Disallow: /*&view=old$
-Disallow: /*&view=new$
-Disallow: /*&view=getfirst$
-Disallow: /*&view=getprevious$
-Disallow: /*&view=getnext$
-Disallow: /*&view=getlast$
-Disallow: /*?s=
-Disallow: /*&s=
-Disallow: /index.php?app=core&module=global&section=login&do=deleteCookies
-Disallow: /index.php?app=forums&module=extras&section=rating
-Disallow: /index.php?app=forums&module=forums&section=markasread
-Disallow: /forum/6-pf-ladies-lounge/
+Disallow: /index.php?app=core&module=system&controller=redirect
+
 Sitemap: https://www.bestdestinationwedding.com/sitemap.php
