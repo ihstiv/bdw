@@ -13,7 +13,10 @@ chdir($root);
 require $root.'/init.php';
 
 $done=array();
+/* Force theme templates to recompile from the DB (raw-DB edits don't bump the recompile flag) */
+try { \IPS\Theme::deleteCompiledTemplate(); $done[]='compiledTemplates'; } catch(\Throwable $e){ echo "tpl: ".$e->getMessage()."\n"; }
+try { \IPS\Theme::deleteCompiledCss(); $done[]='compiledCss'; } catch(\Throwable $e){ /* optional */ }
+try { \IPS\Theme::deleteCompiledResources(); $done[]='themeResources'; } catch(\Throwable $e){ /* optional */ }
 try { \IPS\Data\Store::i()->clearAll(); $done[]='store'; } catch(\Throwable $e){ echo "store: ".$e->getMessage()."\n"; }
 try { \IPS\Data\Cache::i()->clearAll(); $done[]='cache'; } catch(\Throwable $e){ echo "cache: ".$e->getMessage()."\n"; }
-try { if(class_exists('\\IPS\\Theme')){ \IPS\Theme::deleteCompiledResources(); $done[]='themeResources'; } } catch(\Throwable $e){ /* optional */ }
 echo "flushed: ".implode(',', $done)."\nDONE\n";
