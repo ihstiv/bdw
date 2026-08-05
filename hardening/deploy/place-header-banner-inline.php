@@ -19,7 +19,7 @@ $px=$INFO['sql_tbl_prefix']; $T=$px.'core_theme_templates';
 $set=(int)($m->query("SELECT set_id FROM {$px}core_themes WHERE set_is_default=1")->fetch_assoc()['set_id'] ?? 0);
 
 $IMG='/cdn/monthly_2026_08/bdw-wta-banner.png.66364e5a1c8375c4880e14c5cc23f102.png';
-$banner = "\n<a href=\"https://wrighttravelagency.com/\" target=\"_blank\" rel=\"noopener sponsored\" class=\"bdw-header-banner\" style=\"position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:3;display:block;max-width:520px;width:46%;\"><img src=\"$IMG\" alt=\"Contact a BDW Travel Agent\" style=\"width:100%;height:auto;display:block;\"></a>\n";
+$banner = "\n<a href=\"https://wrighttravelagency.com/\" target=\"_blank\" rel=\"noopener sponsored\" class=\"bdw-header-banner\" style=\"position:absolute;top:10px;left:50%;transform:translateX(-50%);margin-left:-115px;z-index:3;display:block;width:728px;max-width:100%;\"><img src=\"$IMG\" alt=\"Contact a BDW Travel Agent\" style=\"width:100%;height:auto;display:block;\"></a>\n";
 
 $row=$m->query("SELECT template_id,template_content FROM $T WHERE template_set_id=$set AND template_app='core' AND template_group='global' AND template_name='globalTemplate' LIMIT 1")->fetch_assoc();
 if(!$row){ fwrite(STDERR,"globalTemplate not found\n"); exit(1); }
