@@ -45,3 +45,7 @@ Thumbs.db
 
 # --- Per-environment web-server rules (each server keeps its own; prod has the SEO redirect set) ---
 /.htaccess
+
+# --- prod media pulled to Local mirror (not code; lives on the server) ---
+/cdn/
+/public/

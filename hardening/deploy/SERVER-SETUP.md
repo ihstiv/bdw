@@ -63,8 +63,12 @@ The deploy runs the hardened CODE but does NOT remove the legacy trees still on 
 untracked, so reset --hard leaves them) and does NOT change the database.
 - Dead IPB3/Huddler dirs + stray scripts can be `rm`'d by hand (same list as the local pass:
   ips_kernel, cache, hooks, root, blog, downloads, lofiversion, interface, ccs_files, fcontent,
-  public, screenshots, cgi-bin, js, ips_8fcf3, admin/convertutf8, admin/install, admin/upgrade;
+  screenshots, cgi-bin, js, ips_8fcf3, admin/convertutf8, admin/install, admin/upgrade;
   keep `img/`). Removing these is code-only and safe.
+- **DO NOT delete `public/`** — despite looking like IPB3 cruft, `public/style_images/destination/`
+  holds the ACTIVE theme skin (`branding_bg.png` = the floral header + brown nav band, referenced
+  by custom.css). Deleting it breaks the header/nav styling. (It was wrongly removed on the Local
+  mirror and had to be restored; prod still has it — leave it.)
 - **Tapatalk must go through the ACP**, not a raw `rm`. On prod it is ENABLED with 7 live hooks;
   deleting `applications/tapatalk` without first removing its DB hooks will fatal every page. Use
   **ACP → Applications → Tapatalk → Uninstall** (handles files + DB together). Do this before/instead
