@@ -598,11 +598,17 @@ class _profile extends \IPS\Helpers\CoverPhoto\Controller
 			$currentClass = $types[ $currentAppModule ][ $currentType ];
 			$currentAppArray = explode( '_', $currentAppModule );
 			$currentApp = $currentAppArray[0];
+			$output = NULL;
 			if( isset( $hasCallback[ $currentType ] ) )
 			{
 				$output	= $hasCallback[ $currentType ]->customTableHelper( $currentClass, \IPS\Http\Url::internal( "app=core&module=members&controller=profile&id={$this->member->member_id}&do=content", 'front', 'profile_content', $this->member->members_seo_name )->setQueryString( array( 'type' => $currentType ) ), array( array( $currentClass::$databaseTable . '.' . $currentClass::$databasePrefix . $currentClass::$databaseColumnMap['author'] . '=?', $this->member->member_id ) ) );
 			}
-			else
+			/* BDW hardening (PHP 8): a partial customTableHelper — e.g. the reviews app returns a
+			   table only for Product and null for Review — leaves $output null and fatals below at
+			   $output->classes[] ("modify property classes on null") on every reviews_review profile
+			   tab view (~40k/day of bot-crawled profiles). Fall back to the default content table
+			   whenever no helper produced one. */
+			if( $output === NULL )
 			{
 				$where = array();
 				$where[] = array( $currentClass::$databaseTable . '.' . $currentClass::$databasePrefix . $currentClass::$databaseColumnMap['author'] . '=?', $this->member->member_id );
