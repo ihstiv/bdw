@@ -21,5 +21,10 @@ LOG=/home/bdwforum/deploy/bdw-deploy.log
   B=$(git rev-parse HEAD 2>/dev/null)
   git fetch origin main --quiet && git reset --hard origin/main
   A=$(git rev-parse HEAD 2>/dev/null)
-  if [ "$B" != "$A" ]; then echo "deployed $B -> $A"; else echo "no change ($A)"; fi
+  if [ "$B" != "$A" ]; then
+    echo "deployed $B -> $A; running post-deploy"
+    [ -f "$ROOT/hardening/deploy/post-deploy.sh" ] && bash "$ROOT/hardening/deploy/post-deploy.sh"
+  else
+    echo "no change ($A)"
+  fi
 } >> "$LOG" 2>&1
